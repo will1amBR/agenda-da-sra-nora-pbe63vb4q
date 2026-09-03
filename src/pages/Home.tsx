@@ -20,6 +20,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { getServices } from '@/lib/data'
+import NoraHeroPhoto from '@/components/NoraHeroPhoto'
 
 export default function Home() {
   const services = getServices()
@@ -102,20 +103,8 @@ export default function Home() {
                 <div className="absolute -inset-2 bg-gradient-to-tr from-[#B8502E]/20 to-amber-200/30 rounded-3xl blur-xl" />
 
                 <div className="relative bg-white rounded-3xl p-6 sm:p-8 shadow-xl border border-[#E8DFD5] space-y-6">
-                  {/* Foto Ilustrativa ou Avatar Acolhedor de Paracuru */}
-                  <div className="relative rounded-2xl overflow-hidden aspect-[4/3] bg-gradient-to-br from-[#EADFD5] to-[#D5C2B4] flex items-center justify-center">
-                    <img
-                      src="https://img.usecurling.com/ppl/large?gender=female&seed=48"
-                      alt="Sra Nora - Cuidadora de Idosos e Diarista em Paracuru"
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute bottom-3 left-3 right-3 bg-[#2D1F1A]/85 backdrop-blur-sm text-white px-3 py-2 rounded-xl text-xs flex items-center justify-between">
-                      <span className="font-medium">Sra Nora em Paracuru / CE</span>
-                      <span className="flex items-center gap-1 text-amber-300">
-                        <MapPin className="w-3 h-3" /> Ceará
-                      </span>
-                    </div>
-                  </div>
+                  {/* Foto da Sra Nora (isolada no componente NoraHeroPhoto e configurada em src/lib/noraConfig.ts) */}
+                  <NoraHeroPhoto />
 
                   {/* Fatos Reais dos Serviços */}
                   <div className="space-y-3 text-left">

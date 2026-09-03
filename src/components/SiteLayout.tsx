@@ -12,7 +12,9 @@ import {
   ShieldCheck,
   AlertCircle,
   ExternalLink,
+  QrCode,
 } from 'lucide-react'
+import { NORA_PIX_CONFIG } from '@/lib/noraConfig'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { getBookings } from '@/lib/data'
@@ -298,6 +300,13 @@ export default function SiteLayout() {
                 <li className="flex items-center gap-2">
                   <Phone className="w-4 h-4 text-[#B8502E] shrink-0" />
                   <span>(85) 99874-5520 (WhatsApp)</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <QrCode className="w-4 h-4 text-[#B8502E] shrink-0" />
+                  <span>
+                    Chave PIX (celular):{' '}
+                    <strong className="text-white font-mono">{NORA_PIX_CONFIG.formattedKey}</strong>
+                  </span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Clock className="w-4 h-4 text-[#B8502E] shrink-0" />

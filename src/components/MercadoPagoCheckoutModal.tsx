@@ -41,6 +41,7 @@ export default function MercadoPagoCheckoutModal({
   const [activeTab, setActiveTab] = useState<'credit_card' | 'pix'>('pix')
   const [loading, setLoading] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [copiedKey, setCopiedKey] = useState(false)
   const [paymentResult, setPaymentResult] = useState<PaymentResult | null>(null)
 
   // Card form state
@@ -67,10 +68,20 @@ export default function MercadoPagoCheckoutModal({
     navigator.clipboard.writeText(pixData.pixCopyPaste)
     setCopied(true)
     toast({
-      title: 'Código PIX copiado!',
+      title: 'Código Pix Copia e Cola copiado!',
       description: 'Cole no aplicativo do seu banco para simular o pagamento.',
     })
     setTimeout(() => setCopied(false), 3000)
+  }
+
+  const handleCopyPixKey = () => {
+    navigator.clipboard.writeText(pixData.pixKey)
+    setCopiedKey(true)
+    toast({
+      title: 'Chave PIX copiada!',
+      description: `Chave telefone ${pixData.pixKey} da Sra Nora copiada.`,
+    })
+    setTimeout(() => setCopiedKey(false), 3000)
   }
 
   const handleProcessCard = async (e: React.FormEvent) => {
@@ -315,12 +326,44 @@ export default function MercadoPagoCheckoutModal({
                   </div>
                   <p className="text-xs text-stone-700">
                     Abra seu aplicativo de banco e selecione{' '}
-                    <strong>Pagar via Pix com QR Code</strong> ou use o{' '}
-                    <strong>Copia e Cola</strong> abaixo.
+                    <strong>Pagar via Pix com QR Code</strong>, transfira diretamente pela{' '}
+                    <strong>Chave Telefone</strong> ou use o <strong>Copia e Cola</strong> abaixo.
                   </p>
                   <p className="text-[11px] text-stone-500">
                     Beneficiário: <strong>{pixData.receiver}</strong> · {pixData.city}
                   </p>
+                </div>
+              </div>
+
+              {/* Bloco Chave PIX da Nora (Telefone) */}
+              <div className="bg-[#FAF7F2] border border-[#E8DFD5] rounded-xl p-3.5 space-y-2 text-left">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-[#8C3A1D] uppercase tracking-wider">
+                    Chave PIX da Sra Nora (Telefone Celular)
+                  </span>
+                  <span className="text-[11px] text-stone-500 bg-white px-2 py-0.5 rounded border border-[#E8DFD5]">
+                    Favorecida: Nora
+                  </span>
+                </div>
+                <div className="flex items-center justify-between gap-3 bg-white p-2.5 rounded-lg border border-[#E8DFD5]">
+                  <div>
+                    <span className="text-xs text-stone-500 block text-[11px]">
+                      Chave para transferência:
+                    </span>
+                    <span className="font-mono font-bold text-sm text-[#2D1F1A]">
+                      {pixData.pixKeyFormatted}
+                    </span>
+                  </div>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={handleCopyPixKey}
+                    className="border-[#B8502E]/30 hover:bg-[#F9EDE8] text-[#B8502E] font-medium text-xs flex items-center gap-1.5 shrink-0"
+                  >
+                    <Copy className="w-3.5 h-3.5" />
+                    {copiedKey ? 'Chave Copiada!' : 'Copiar Chave'}
+                  </Button>
                 </div>
               </div>
 

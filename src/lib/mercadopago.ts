@@ -65,20 +65,29 @@ export interface PaymentResult {
   receiptUrl?: string
 }
 
+import { NORA_PIX_CONFIG } from './noraConfig'
+
+// Reexporta a configuração central do PIX para fácil acesso
+export { NORA_PIX_CONFIG }
+
 export function generateTestPixData(bookingCode: string, amount: number) {
-  // Código Copia e Cola padrão EMV / Pix simulado realista
+  // Código Copia e Cola padrão EMV / Pix simulado realista com a chave telefone oficial da Nora
   const cleanCode = bookingCode.replace(/[^a-zA-Z0-9]/g, '')
   const centavos = Math.round(amount * 100)
-  const pixCopyPaste = `00020126580014br.gov.bcb.pix0136agendanora-paracuru-${cleanCode}@mercadopago.com520400005303986540${centavos}5802BR5916NORA SERVICOS CE6008PARACURU62240520TESTMP${cleanCode}6304C8A1`
+  const pixKeyRaw = NORA_PIX_CONFIG.rawKey // 11982106774
+  // Payload EMV Pix padrão do Banco Central com a chave celular (+5511982106774 / 11982106774)
+  const pixCopyPaste = `00020126480014br.gov.bcb.pix0114+55${pixKeyRaw}520400005303986540${centavos}5802BR5916NORA SERVICOS CE6008PARACURU62240520TESTMP${cleanCode}6304C8A1`
 
   // Data de expiração: 15 minutos a partir de agora
   const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString()
 
   return {
     pixCopyPaste,
-    pixKey: 'agendanora-paracuru@teste.mercadopago.br',
-    receiver: 'Nora Cuidado & Limpeza Ltda (Simulado MercadoPago)',
-    city: 'Paracuru - CE',
+    pixKey: NORA_PIX_CONFIG.rawKey,
+    pixKeyFormatted: NORA_PIX_CONFIG.formattedKey,
+    pixKeyType: NORA_PIX_CONFIG.keyType,
+    receiver: NORA_PIX_CONFIG.receiver,
+    city: NORA_PIX_CONFIG.city,
     expiresAt,
   }
 }

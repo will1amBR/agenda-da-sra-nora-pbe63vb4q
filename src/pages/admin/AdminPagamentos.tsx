@@ -15,6 +15,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { getPayments, getBookings } from '@/lib/data'
 import { PaymentTransaction } from '@/types'
+import { NORA_PIX_CONFIG } from '@/lib/noraConfig'
 
 export default function AdminPagamentosPage() {
   const [payments, setPayments] = useState<PaymentTransaction[]>([])
@@ -59,9 +60,9 @@ export default function AdminPagamentosPage() {
         </div>
       </div>
 
-      {/* BANNER DE INTEGRAÇÃO ISOLADA */}
-      <div className="bg-sky-50 border border-sky-200 rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div className="space-y-1 text-xs">
+      {/* BANNER DE INTEGRAÇÃO ISOLADA & DADOS BANCÁRIOS / PIX */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="lg:col-span-2 bg-sky-50 border border-sky-200 rounded-2xl p-5 space-y-2 text-xs">
           <div className="flex items-center gap-2">
             <div className="bg-[#009EE3] text-white font-bold text-[10px] px-2 py-0.5 rounded">
               MercadoPago Sandbox
@@ -74,6 +75,30 @@ export default function AdminPagamentosPage() {
             O fluxo simula respostas reais de cartões de teste e compensação bancária do PIX. Para
             ativar cobranças reais na conta bancária da Sra Nora, basta plugar o{' '}
             <code>Access Token</code> de produção na camada <code>src/lib/mercadopago.ts</code>.
+          </p>
+        </div>
+
+        {/* Card Chave PIX Cadastrada da Sra Nora */}
+        <div className="bg-[#FAF7F2] border border-[#E8DFD5] rounded-2xl p-5 space-y-2 text-xs">
+          <div className="flex items-center justify-between">
+            <span className="font-semibold uppercase tracking-wider text-[10px] text-[#8C3A1D]">
+              Chave PIX da Sra Nora
+            </span>
+            <span className="text-[10px] bg-emerald-100 text-emerald-800 font-semibold px-2 py-0.5 rounded-full">
+              Ativa
+            </span>
+          </div>
+          <div>
+            <span className="text-stone-500 text-[11px] block">Telefone Celular:</span>
+            <span className="font-mono font-bold text-base text-[#2D1F1A]">
+              {NORA_PIX_CONFIG.formattedKey}
+            </span>
+          </div>
+          <p className="text-[11px] text-stone-500 pt-1 border-t border-[#E8DFD5]">
+            Valor copiável:{' '}
+            <code className="font-mono bg-white px-1 py-0.5 rounded border border-[#E8DFD5] text-stone-700">
+              {NORA_PIX_CONFIG.rawKey}
+            </code>
           </p>
         </div>
       </div>
