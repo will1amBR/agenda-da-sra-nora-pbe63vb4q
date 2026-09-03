@@ -336,6 +336,18 @@ export default function MinhasReservasPage() {
                       </div>
                     </div>
 
+                    {/* O que precisa fazer / Observações */}
+                    {booking.notes && (
+                      <div className="bg-[#FAF7F2] p-3.5 rounded-xl border border-[#EADFD5] text-xs space-y-1">
+                        <span className="font-bold text-[11px] text-[#8C3A1D] uppercase tracking-wider block">
+                          O que precisa fazer / Observações:
+                        </span>
+                        <p className="text-[#372A24] whitespace-pre-line bg-white p-2 rounded-lg border border-[#EADFD5]/70">
+                          {booking.notes}
+                        </p>
+                      </div>
+                    )}
+
                     {/* CAIXA DE NEGOCIAÇÃO DE VALOR PELA NORA (QUANDO HOUVER) */}
                     {booking.status === 'negociacao_pendente' && (
                       <div className="bg-amber-50 border border-amber-300 rounded-xl p-4 space-y-3">

@@ -328,11 +328,20 @@ export default function AdminSolicitacoesPage() {
                     </div>
                   </div>
 
-                  {/* Observações do Cliente */}
+                  {/* Observações do Cliente / O que precisa fazer */}
                   {booking.notes && (
-                    <div className="bg-[#FAF7F2] p-3 rounded-xl border border-[#EADFD5] text-xs text-[#5C4537]">
-                      <strong className="text-[#2D1F1A]">Observação do cliente:</strong> "
-                      {booking.notes}"
+                    <div className="bg-[#FAF7F2] p-3.5 rounded-xl border border-[#EADFD5] text-xs text-[#5C4537] space-y-1">
+                      <div className="flex items-center gap-1.5 font-bold text-[#8C3A1D] text-[11px] uppercase tracking-wider">
+                        <Sparkles className="w-3.5 h-3.5 text-[#B8502E]" />
+                        <span>O que o cliente precisa que seja feito / Observações:</span>
+                      </div>
+                      <p className="text-[#372A24] font-medium leading-relaxed whitespace-pre-line bg-white p-2.5 rounded-lg border border-[#EADFD5]/80">
+                        {booking.notes}
+                      </p>
+                      <p className="text-[10px] text-[#8C7A70] italic">
+                        Utilize esses detalhes para avaliar se o valor fixo original cobre todo o
+                        trabalho ou se é o caso de propor um ajuste justo.
+                      </p>
                     </div>
                   )}
 

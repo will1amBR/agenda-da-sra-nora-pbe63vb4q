@@ -162,101 +162,99 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service) => {
             return (
-              <Card
+              <div
                 key={service.id}
-                className="flex flex-col justify-between border-[#EADFD5] hover:border-[#B8502E]/50 hover:shadow-lg transition-all rounded-2xl bg-white overflow-hidden group"
+                className="flex flex-col justify-between border border-[#E8DFD5] hover:border-[#B8502E] hover:shadow-md transition-all rounded-3xl bg-white overflow-hidden p-6 sm:p-7 group"
               >
-                <CardContent className="p-7 space-y-6 flex-1 flex flex-col justify-between">
-                  <div className="space-y-4 text-left">
-                    {/* Badge topo & Categoria */}
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-[11px] font-semibold text-[#B8502E] uppercase tracking-wider bg-[#F9EDE8] px-2.5 py-1 rounded-full">
-                        {service.category === 'idosos'
-                          ? 'Cuidado de Idosos'
-                          : service.category === 'limpeza'
-                            ? 'Limpeza Residencial'
-                            : 'Recorrente / Semanal'}
+                <div className="space-y-4 text-left">
+                  {/* Badge topo & Categoria */}
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-[11px] font-semibold text-[#B8502E] uppercase tracking-wider bg-[#F9EDE8] px-2.5 py-1 rounded-full">
+                      {service.category === 'idosos'
+                        ? 'Cuidado de Idosos'
+                        : service.category === 'limpeza'
+                          ? 'Limpeza Residencial'
+                          : 'Recorrente / Semanal'}
+                    </span>
+                    {service.badge && (
+                      <span className="text-[10px] text-amber-900 bg-amber-100 font-semibold px-2 py-0.5 rounded-full">
+                        {service.badge}
                       </span>
-                      {service.badge && (
-                        <span className="text-[10px] text-amber-800 bg-amber-100 font-semibold px-2 py-0.5 rounded">
-                          {service.badge}
+                    )}
+                  </div>
+
+                  {/* Título & Descrição */}
+                  <div>
+                    <h3 className="font-serif text-xl font-bold text-[#2D1F1A] group-hover:text-[#B8502E] transition-colors leading-snug">
+                      {service.name}
+                    </h3>
+                    <p className="text-xs text-[#6B5345] mt-2 leading-relaxed">
+                      {service.description}
+                    </p>
+                  </div>
+
+                  {/* Preço em destaque limpo no estilo Parafuzo */}
+                  <div className="bg-[#FAF7F2] p-4 rounded-2xl border border-[#E8DFD5] space-y-1">
+                    <span className="text-[10px] uppercase font-bold text-[#8C3A1D] tracking-wider block">
+                      {service.priceType === 'monthly_fixed'
+                        ? 'Valor Mensal Fixo'
+                        : service.priceType === 'range'
+                          ? 'Faixa de Preço Estimada'
+                          : 'Preço Fixo de Referência'}
+                    </span>
+                    <div className="flex items-baseline gap-1 text-[#2D1F1A]">
+                      <span className="text-xs font-semibold">R$</span>
+                      <span className="text-3xl font-serif font-bold text-[#B8502E]">
+                        {service.basePrice.toLocaleString('pt-BR', { minimumFractionDigits: 0 })}
+                      </span>
+                      {service.priceType === 'monthly_fixed' && (
+                        <span className="text-xs text-[#7B6153] font-medium">/mês (dia 03)</span>
+                      )}
+                      {service.priceType === 'range' && (
+                        <span className="text-xs text-[#7B6153] font-medium">
+                          a R$ {service.priceRange?.max}
                         </span>
                       )}
                     </div>
-
-                    {/* Título & Descrição */}
-                    <div>
-                      <h3 className="font-serif text-xl font-bold text-[#2D1F1A] group-hover:text-[#B8502E] transition-colors">
-                        {service.name}
-                      </h3>
-                      <p className="text-xs text-[#6B5345] mt-2 leading-relaxed">
-                        {service.description}
+                    {service.priceRange?.note && (
+                      <p className="text-[11px] text-[#7B6153] italic pt-1">
+                        {service.priceRange.note}
                       </p>
-                    </div>
-
-                    {/* Preço em destaque */}
-                    <div className="bg-[#FAF7F2] p-4 rounded-xl border border-[#EADFD5] space-y-1">
-                      <span className="text-[10px] uppercase font-bold text-[#8C3A1D] tracking-wider block">
-                        {service.priceType === 'monthly_fixed'
-                          ? 'Valor Mensal Fixo'
-                          : service.priceType === 'range'
-                            ? 'Faixa de Preço Estimada'
-                            : 'Preço Fixo de Referência'}
-                      </span>
-                      <div className="flex items-baseline gap-1 text-[#2D1F1A]">
-                        <span className="text-sm font-semibold">R$</span>
-                        <span className="text-3xl font-serif font-bold text-[#B8502E]">
-                          {service.basePrice.toLocaleString('pt-BR', { minimumFractionDigits: 0 })}
-                        </span>
-                        {service.priceType === 'monthly_fixed' && (
-                          <span className="text-xs text-[#7B6153] font-medium">/mês (dia 03)</span>
-                        )}
-                        {service.priceType === 'range' && (
-                          <span className="text-xs text-[#7B6153] font-medium">
-                            a R$ {service.priceRange?.max}
-                          </span>
-                        )}
-                      </div>
-                      {service.priceRange?.note && (
-                        <p className="text-[11px] text-[#7B6153] italic pt-1">
-                          {service.priceRange.note}
-                        </p>
-                      )}
-                    </div>
-
-                    {/* Lista de Itens Inclusos */}
-                    <div className="space-y-2 pt-2">
-                      <span className="text-xs font-semibold text-[#2D1F1A] block">
-                        O que inclui:
-                      </span>
-                      <ul className="space-y-1.5 text-xs text-[#6B5345]">
-                        {service.highlights.map((h, i) => (
-                          <li key={i} className="flex items-start gap-2">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                            <span>{h}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                    )}
                   </div>
 
-                  {/* Ação Card */}
-                  <div className="pt-4 border-t border-[#EADFD5]">
-                    <Button
-                      asChild
-                      className="w-full bg-[#FAF7F2] hover:bg-[#B8502E] text-[#B8502E] hover:text-white border border-[#B8502E]/30 rounded-xl transition-all font-medium text-sm py-2.5"
-                    >
-                      <Link to={`/agendar?service=${service.id}`}>
-                        <span>Agendar Este Serviço</span>
-                        <ArrowRight className="w-4 h-4 ml-1.5" />
-                      </Link>
-                    </Button>
+                  {/* Lista de Itens Inclusos */}
+                  <div className="space-y-2 pt-1">
+                    <span className="text-xs font-semibold text-[#2D1F1A] block">
+                      O que está incluso:
+                    </span>
+                    <ul className="space-y-1.5 text-xs text-[#6B5345]">
+                      {service.highlights.map((h, i) => (
+                        <li key={i} className="flex items-start gap-2">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                          <span>{h}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+
+                {/* Ação CTA clara e moderna */}
+                <div className="pt-6 mt-4 border-t border-[#E8DFD5]">
+                  <Button
+                    asChild
+                    className="w-full bg-[#B8502E] hover:bg-[#A04223] text-white rounded-full transition-all font-medium text-sm py-5 shadow-xs group-hover:scale-[1.01]"
+                  >
+                    <Link to={`/agendar?service=${service.id}`}>
+                      <span>Agendar Agora</span>
+                      <ArrowRight className="w-4 h-4 ml-1.5" />
+                    </Link>
+                  </Button>
+                </div>
+              </div>
             )
           })}
         </div>
