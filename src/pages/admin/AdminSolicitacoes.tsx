@@ -330,15 +330,15 @@ export default function AdminSolicitacoesPage() {
 
                   {/* Observações do Cliente / O que precisa fazer */}
                   {booking.notes && (
-                    <div className="bg-[#FAF7F2] p-3.5 rounded-xl border border-[#EADFD5] text-xs text-[#5C4537] space-y-1">
-                      <div className="flex items-center gap-1.5 font-bold text-[#8C3A1D] text-[11px] uppercase tracking-wider">
+                    <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs text-slate-700 space-y-1">
+                      <div className="flex items-center gap-1.5 font-bold text-teal-800 text-[11px] uppercase tracking-wider">
                         <Sparkles className="w-3.5 h-3.5 text-teal-700" />
                         <span>O que o cliente precisa que seja feito / Observações:</span>
                       </div>
-                      <p className="text-[#372A24] font-medium leading-relaxed whitespace-pre-line bg-white p-2.5 rounded-lg border border-[#EADFD5]/80">
+                      <p className="text-slate-800 font-medium leading-relaxed whitespace-pre-line bg-white p-2.5 rounded-lg border border-slate-200">
                         {booking.notes}
                       </p>
-                      <p className="text-[10px] text-[#8C7A70] italic">
+                      <p className="text-[10px] text-slate-500 italic">
                         Utilize esses detalhes para avaliar se o valor fixo original cobre todo o
                         trabalho ou se é o caso de propor um ajuste justo.
                       </p>
@@ -455,8 +455,8 @@ export default function AdminSolicitacoesPage() {
                   {booking.status === 'aguardando_aprovacao' &&
                     !isNegotiatingModal &&
                     !isRejectingModal && (
-                      <div className="pt-2 flex flex-wrap items-center justify-between gap-3 border-t border-[#EADFD5]">
-                        <span className="text-[11px] text-[#7B6153]">
+                      <div className="pt-2 flex flex-wrap items-center justify-between gap-3 border-t border-slate-200">
+                        <span className="text-[11px] text-slate-500">
                           Escolha o que deseja fazer com este pedido:
                         </span>
 

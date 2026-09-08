@@ -36,7 +36,7 @@ export default function NoraHeroPhoto({ className = '' }: NoraHeroPhotoProps) {
 
   return (
     <div
-      className={`relative rounded-2xl overflow-hidden aspect-[4/3] bg-gradient-to-br from-[#EADFD5] to-[#D5C2B4] flex items-center justify-center ${className}`}
+      className={`relative rounded-2xl overflow-hidden aspect-[4/3] bg-gradient-to-br from-teal-100 to-slate-200 flex items-center justify-center ${className}`}
     >
       <img
         src={imgSrc}

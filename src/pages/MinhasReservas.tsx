@@ -338,11 +338,11 @@ export default function MinhasReservasPage() {
 
                     {/* O que precisa fazer / Observações */}
                     {booking.notes && (
-                      <div className="bg-[#FAF7F2] p-3.5 rounded-xl border border-[#EADFD5] text-xs space-y-1">
-                        <span className="font-bold text-[11px] text-[#8C3A1D] uppercase tracking-wider block">
+                      <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs space-y-1">
+                        <span className="font-bold text-[11px] text-teal-800 uppercase tracking-wider block">
                           O que precisa fazer / Observações:
                         </span>
-                        <p className="text-[#372A24] whitespace-pre-line bg-white p-2 rounded-lg border border-[#EADFD5]/70">
+                        <p className="text-slate-800 whitespace-pre-line bg-white p-2 rounded-lg border border-slate-200">
                           {booking.notes}
                         </p>
                       </div>
@@ -359,7 +359,7 @@ export default function MinhasReservasPage() {
                             </h4>
                             <p className="text-amber-950 font-medium">
                               Novo valor proposto:{' '}
-                              <strong className="text-base text-[#8C3A1D]">
+                              <strong className="text-base text-teal-800">
                                 R${' '}
                                 {booking.proposedPrice?.toLocaleString('pt-BR', {
                                   minimumFractionDigits: 2,
@@ -401,7 +401,7 @@ export default function MinhasReservasPage() {
 
                     {/* CAIXA DE AGUARDANDO APROVAÇÃO */}
                     {booking.status === 'aguardando_aprovacao' && (
-                      <div className="bg-[#FAF7F2] p-3 rounded-xl border border-[#EADFD5] text-xs text-[#7B6153] flex items-center justify-between">
+                      <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs text-slate-600 flex items-center justify-between">
                         <span className="flex items-center gap-2">
                           <Clock className="w-4 h-4 text-amber-600 shrink-0" />
                           Horário reservado temporariamente. A Sra Nora está avaliando o pedido.

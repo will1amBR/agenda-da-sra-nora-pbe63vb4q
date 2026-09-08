@@ -366,71 +366,71 @@ export default function AgendarPage() {
   }, [date])
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] py-6 sm:py-10">
+    <div className="min-h-screen bg-[#F6F8F7] py-6 sm:py-10">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {createdBooking ? (
           /* ========================================================
              TELA DE SUCESSO MODERNA (ESTILO PARAFUZO CONFIRMADO)
              ======================================================== */
-          <div className="max-w-2xl mx-auto bg-white rounded-3xl p-8 sm:p-12 border border-[#E8DFD5] shadow-sm text-center space-y-6 animate-in fade-in zoom-in-95">
+          <div className="max-w-2xl mx-auto bg-white rounded-3xl p-8 sm:p-12 border border-slate-200 shadow-sm text-center space-y-6 animate-in fade-in zoom-in-95">
             <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 mx-auto flex items-center justify-center border border-emerald-200">
               <CheckCircle2 className="w-9 h-9" />
             </div>
 
             <div className="space-y-2">
-              <span className="text-[11px] uppercase font-bold tracking-wider text-[#8C3A1D] bg-[#F9EDE8] px-3 py-1 rounded-full">
+              <span className="text-[11px] uppercase font-bold tracking-wider text-teal-800 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full">
                 Solicitação enviada com sucesso
               </span>
-              <h2 className="font-serif text-3xl font-bold text-[#2D1F1A]">
+              <h2 className="text-3xl font-bold text-slate-900">
                 Horário reservado com a Sra Nora!
               </h2>
-              <p className="text-sm text-[#6B5345] max-w-md mx-auto">
+              <p className="text-sm text-slate-600 max-w-md mx-auto">
                 Seu pedido já foi para a lista de aprovação da Nora. Assim que ela conferir o que
                 precisa fazer, ela aprova e o link de pagamento do MercadoPago é liberado.
               </p>
             </div>
 
             {/* Recibo limpo da reserva */}
-            <div className="bg-[#FAF7F2] border border-[#E8DFD5] rounded-2xl p-6 text-left space-y-3.5 text-xs text-[#372A24]">
-              <div className="flex justify-between items-center pb-3 border-b border-[#E8DFD5]">
-                <span className="text-[#7B6153]">Código do Agendamento:</span>
+            <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 text-left space-y-3.5 text-xs text-slate-800">
+              <div className="flex justify-between items-center pb-3 border-b border-slate-200">
+                <span className="text-slate-500">Código do Agendamento:</span>
                 <span className="font-mono font-bold text-sm text-teal-800">
                   #{createdBooking.code}
                 </span>{' '}
               </div>
 
               <div className="flex justify-between">
-                <span className="text-[#7B6153]">Serviço:</span>
+                <span className="text-slate-500">Serviço:</span>
                 <span className="font-semibold text-right">{selectedService.name}</span>
               </div>
 
               <div className="flex justify-between">
-                <span className="text-[#7B6153]">Data &amp; Horário:</span>
+                <span className="text-slate-500">Data &amp; Horário:</span>
                 <span className="font-semibold capitalize">
                   {readableDate} às {createdBooking.time}
                 </span>
               </div>
 
               <div className="flex justify-between">
-                <span className="text-[#7B6153]">Endereço em Paracuru:</span>
+                <span className="text-slate-500">Endereço em Paracuru:</span>
                 <span className="font-semibold text-right max-w-[220px] truncate">
                   {createdBooking.client.address} ({createdBooking.client.neighborhood})
                 </span>
               </div>
 
               {createdBooking.notes && (
-                <div className="pt-2 border-t border-[#E8DFD5] space-y-1">
-                  <span className="text-[11px] font-semibold text-[#8C3A1D]">
+                <div className="pt-2 border-t border-slate-200 space-y-1">
+                  <span className="text-[11px] font-semibold text-teal-800">
                     O que você pediu para fazer:
                   </span>
-                  <p className="text-[#5C4537] italic bg-white p-2.5 rounded-lg border border-[#E8DFD5]">
+                  <p className="text-slate-700 italic bg-white p-2.5 rounded-lg border border-slate-200">
                     "{createdBooking.notes}"
                   </p>
                 </div>
               )}
 
-              <div className="flex justify-between items-center pt-3 border-t border-[#E8DFD5]">
-                <span className="text-[#7B6153]">Valor Fixo Inicial:</span>
+              <div className="flex justify-between items-center pt-3 border-t border-slate-200">
+                <span className="text-slate-500">Valor Fixo Inicial:</span>
                 <span className="font-bold text-lg text-teal-800">
                   R${' '}
                   {createdBooking.originalPrice.toLocaleString('pt-BR', {
@@ -440,7 +440,7 @@ export default function AgendarPage() {
               </div>
 
               <div className="flex justify-between items-center">
-                <span className="text-[#7B6153]">Status:</span>
+                <span className="text-slate-500">Status:</span>
                 <span className="inline-flex items-center gap-1.5 font-semibold text-amber-800 bg-amber-100/90 px-2.5 py-1 rounded-full text-[11px]">
                   <Clock className="w-3.5 h-3.5" /> Aguardando aprovação da Nora
                 </span>
@@ -472,7 +472,7 @@ export default function AgendarPage() {
               <Button
                 asChild
                 variant="outline"
-                className="rounded-full border-[#D6C7BA] text-[#594437] hover:bg-white py-6"
+                className="rounded-full border-slate-300 text-slate-700 hover:bg-slate-50 py-6"
               >
                 <Link to="/painel/solicitacoes">Simular Aprovação no Painel da Nora</Link>
               </Button>
@@ -484,32 +484,32 @@ export default function AgendarPage() {
              ======================================================== */
           <div className="space-y-6 sm:space-y-8 text-left">
             {/* Header com breadcrumb sutil */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-[#E8DFD5] pb-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-slate-200 pb-4">
               <div>
                 <Link
                   to="/"
-                  className="inline-flex items-center gap-1 text-xs text-[#8C3A1D] hover:underline mb-1 font-medium"
+                  className="inline-flex items-center gap-1 text-xs text-teal-800 hover:underline mb-1 font-medium"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" /> Voltar ao início
                 </Link>
-                <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#2D1F1A]">
+                <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">
                   Agendar com a Sra Nora
                 </h1>
-                <p className="text-xs sm:text-sm text-[#7B6153]">
+                <p className="text-xs sm:text-sm text-slate-600">
                   Atendimento transparente em <strong>Paracuru (CE)</strong> · Rápido, sem fricção e
                   com aprovação garantida
                 </p>
               </div>
 
               {/* Tag de segurança / tranquilidade */}
-              <div className="hidden sm:flex items-center gap-2 text-xs text-[#6B5345] bg-white px-3.5 py-1.5 rounded-full border border-[#E8DFD5] shadow-xs">
+              <div className="hidden sm:flex items-center gap-2 text-xs text-slate-600 bg-white px-3.5 py-1.5 rounded-full border border-slate-200 shadow-xs">
                 <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
                 <span>Horário garantido e sem cobrança antecipada</span>
               </div>
             </div>
 
             {/* BARRA DE PROGRESSO MODERNA / STEPPER (ESTILO PARAFUZO) */}
-            <div className="bg-white rounded-2xl p-4 sm:p-5 border border-[#E8DFD5] shadow-xs">
+            <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-xs">
               <div className="grid grid-cols-4 gap-2 sm:gap-4 relative">
                 {STEPS.map((s) => {
                   const isCompleted = currentStep > s.id
@@ -525,7 +525,7 @@ export default function AgendarPage() {
                         if (isCompleted) setCurrentStep(s.id)
                       }}
                       className={`flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-3 text-left transition-all p-1.5 rounded-xl ${
-                        isCompleted ? 'cursor-pointer hover:bg-[#FAF7F2]' : 'cursor-default'
+                        isCompleted ? 'cursor-pointer hover:bg-slate-50' : 'cursor-default'
                       }`}
                     >
                       {/* Círculo do passo */}
@@ -535,7 +535,7 @@ export default function AgendarPage() {
                             ? 'bg-emerald-600 text-white'
                             : isCurrent
                               ? 'bg-teal-700 text-white ring-4 ring-teal-500/15 shadow-sm'
-                              : 'bg-[#F2ECE5] text-[#8C7A70]'
+                              : 'bg-slate-100 text-slate-500'
                         }`}
                       >
                         {isCompleted ? <Check className="w-4 h-4" /> : s.id}
@@ -543,7 +543,7 @@ export default function AgendarPage() {
 
                       {/* Rótulo */}
                       <div className="text-center sm:text-left min-w-0">
-                        <span className="block text-[10px] font-semibold uppercase tracking-wider text-[#8C7A70]">
+                        <span className="block text-[10px] font-semibold uppercase tracking-wider text-slate-500">
                           Passo {s.id}
                         </span>
                         <span
@@ -551,8 +551,8 @@ export default function AgendarPage() {
                             isCurrent
                               ? 'text-teal-800 font-bold'
                               : isCompleted
-                                ? 'text-[#2D1F1A]'
-                                : 'text-[#8C7A70]'
+                                ? 'text-slate-800'
+                                : 'text-slate-500'
                           }`}
                         >
                           <span className="hidden sm:inline">{s.label}</span>
@@ -565,7 +565,7 @@ export default function AgendarPage() {
               </div>
 
               {/* Linha de progresso sutil */}
-              <div className="w-full bg-[#F0E8DF] h-1.5 rounded-full mt-3 overflow-hidden">
+              <div className="w-full bg-slate-100 h-1.5 rounded-full mt-3 overflow-hidden">
                 <div
                   className="bg-teal-700 h-full transition-all duration-300 rounded-full"
                   style={{ width: `${((currentStep - 1) / 3) * 100}%` }}
@@ -581,15 +581,15 @@ export default function AgendarPage() {
                     PASSO 1: O QUE PRECISA FAZER (SERVIÇOS + DETALHAMENTO)
                     ==================================================== */}
                 {currentStep === 1 && (
-                  <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E8DFD5] shadow-xs space-y-8 animate-in fade-in duration-200">
+                  <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs space-y-8 animate-in fade-in duration-200">
                     <div className="space-y-1">
                       <span className="text-xs font-bold uppercase tracking-wider text-teal-800">
-                        Passo 3 de 4 · Seus Dados
+                        Passo 1 de 4 · Selecione o Serviço
                       </span>{' '}
-                      <h2 className="font-serif text-2xl font-bold text-[#2D1F1A]">
+                      <h2 className="text-2xl font-bold text-slate-900">
                         O que você precisa que seja feito?
                       </h2>
-                      <p className="text-xs sm:text-sm text-[#7B6153]">
+                      <p className="text-xs sm:text-sm text-slate-600">
                         Selecione o tipo de atendimento e conte em poucas palavras as necessidades
                         da sua casa ou familiar.
                       </p>
@@ -607,7 +607,7 @@ export default function AgendarPage() {
                             className={`relative rounded-2xl p-5 border text-left cursor-pointer transition-all ${
                               isSelected
                                 ? 'border-teal-600 bg-teal-50/20 shadow-sm ring-2 ring-teal-600/20'
-                                : 'border-[#E8DFD5] bg-white hover:border-[#CDBAB0] hover:bg-[#FAF7F2]/40'
+                                : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/50'
                             }`}
                           >
                             {/* Checkmark no card */}
@@ -616,7 +616,7 @@ export default function AgendarPage() {
                                 className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${
                                   isSelected
                                     ? 'bg-teal-700 text-white'
-                                    : 'bg-[#F2ECE5] text-[#8C7A70]'
+                                    : 'bg-slate-100 text-slate-600'
                                 }`}
                               >
                                 {srv.category === 'idosos'
@@ -630,33 +630,33 @@ export default function AgendarPage() {
                                 className={`w-5 h-5 rounded-full flex items-center justify-center border transition-all ${
                                   isSelected
                                     ? 'bg-teal-700 border-teal-700 text-white'
-                                    : 'border-stone-300 bg-white'
+                                    : 'border-slate-300 bg-white'
                                 }`}
                               >
                                 {isSelected && <Check className="w-3.5 h-3.5" />}
                               </div>
                             </div>
 
-                            <h3 className="font-serif font-bold text-base text-[#2D1F1A] leading-snug">
+                            <h3 className="font-bold text-base text-slate-900 leading-snug">
                               {srv.name}
                             </h3>
 
-                            <p className="text-xs text-[#7B6153] mt-1.5 leading-relaxed line-clamp-2">
+                            <p className="text-xs text-slate-600 mt-1.5 leading-relaxed line-clamp-2">
                               {srv.description}
                             </p>
 
                             {/* Preço de referência */}
-                            <div className="pt-3 mt-3 border-t border-[#E8DFD5]/70 flex items-baseline justify-between">
-                              <span className="text-[11px] text-[#8C7A70]">Valor inicial:</span>
+                            <div className="pt-3 mt-3 border-t border-slate-100 flex items-baseline justify-between">
+                              <span className="text-[11px] text-slate-500">Valor inicial:</span>
                               <div className="text-right">
                                 <span className="font-bold text-base text-teal-800">
                                   R$ {srv.basePrice}
                                 </span>
                                 {srv.priceType === 'monthly_fixed' && (
-                                  <span className="text-[11px] text-[#7B6153]"> /mês</span>
+                                  <span className="text-[11px] text-slate-500"> /mês</span>
                                 )}
                                 {srv.priceType === 'range' && srv.priceRange?.max && (
-                                  <span className="text-[10px] text-[#8C7A70]">
+                                  <span className="text-[10px] text-slate-500">
                                     {' '}
                                     (a R$ {srv.priceRange.max})
                                   </span>
@@ -669,24 +669,24 @@ export default function AgendarPage() {
                     </div>
 
                     {/* NOVO CAMPO: O QUE PRECISA FAZER (TEXTAREA + SUGESTÕES RÁPIDAS) */}
-                    <div className="bg-[#FAF7F2] rounded-2xl p-5 border border-[#E8DFD5] space-y-3.5">
+                    <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-3.5">
                       <div className="flex items-start justify-between gap-2">
                         <div>
                           <Label
                             htmlFor="needs"
-                            className="font-serif font-bold text-sm text-[#2D1F1A] flex items-center gap-1.5"
+                            className="font-bold text-sm text-slate-900 flex items-center gap-1.5"
                           >
                             <FileText className="w-4 h-4 text-teal-700" />
                             <span>O que precisa ser feito? (Observações e detalhes)</span>
                           </Label>
-                          <p className="text-[11px] text-[#7B6153] mt-0.5">
+                          <p className="text-[11px] text-slate-600 mt-0.5">
                             Descreva cômodos, quintal, maresia, animais, remédios ou sujidade para a
                             Nora avaliar com exatidão.
                           </p>
                         </div>
                         <Badge
                           variant="outline"
-                          className="text-[10px] bg-white border-[#E8DFD5] text-[#8C3A1D] shrink-0"
+                          className="text-[10px] bg-white border-teal-200 text-teal-800 shrink-0"
                         >
                           Para a Nora avaliar
                         </Badge>
@@ -703,7 +703,7 @@ export default function AgendarPage() {
 
                       {/* Chips de clique rápido para ajudar o cliente */}
                       <div className="space-y-1.5">
-                        <span className="text-[11px] font-semibold text-[#8C7A70] block">
+                        <span className="text-[11px] font-semibold text-slate-600 block">
                           Sugestões rápidas (toque para adicionar):
                         </span>
                         <div className="flex flex-wrap gap-1.5">
@@ -742,7 +742,7 @@ export default function AgendarPage() {
                     PASSO 2: SELEÇÃO DE DIA E HORÁRIO (CALENDÁRIO MODERNO + CHIPS)
                     ==================================================== */}
                 {currentStep === 2 && (
-                  <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E8DFD5] shadow-xs space-y-8 animate-in fade-in duration-200">
+                  <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs space-y-8 animate-in fade-in duration-200">
                     <div className="space-y-1">
                       <span className="text-xs font-bold uppercase tracking-wider text-teal-800">
                         Passo 2 de 4
@@ -750,7 +750,7 @@ export default function AgendarPage() {
                       <h2 className="text-2xl font-bold text-slate-900">
                         Quando você prefere o atendimento?
                       </h2>
-                      <p className="text-xs sm:text-sm text-[#7B6153]">
+                      <p className="text-xs sm:text-sm text-slate-600">
                         Escolha o dia no calendário e toque no melhor horário de início para você em
                         Paracuru.
                       </p>
@@ -773,28 +773,28 @@ export default function AgendarPage() {
                     </div>
 
                     {/* CALENDÁRIO VISUAL LEVE & MODERNO */}
-                    <div className="bg-[#FAF7F2] rounded-2xl p-5 border border-[#E8DFD5] space-y-4">
+                    <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-4">
                       {/* Cabeçalho do mês e setas */}
                       <div className="flex items-center justify-between">
                         <div>
-                          <span className="font-serif font-bold text-base text-[#2D1F1A] capitalize">
+                          <span className="font-bold text-base text-slate-900 capitalize">
                             {calendarMonth.toLocaleDateString('pt-BR', {
                               month: 'long',
                               year: 'numeric',
                             })}
                           </span>
-                          <span className="block text-[11px] text-[#7B6153]">
+                          <span className="block text-[11px] text-slate-500">
                             Toque no dia desejado
                           </span>
                         </div>
 
-                        <div className="flex items-center gap-1 bg-white p-1 rounded-xl border border-[#E8DFD5]">
+                        <div className="flex items-center gap-1 bg-white p-1 rounded-xl border border-slate-200">
                           <Button
                             type="button"
                             size="icon"
                             variant="ghost"
                             onClick={prevMonth}
-                            className="h-8 w-8 text-[#5C4537] hover:text-[#2D1F1A]"
+                            className="h-8 w-8 text-slate-600 hover:text-slate-900"
                             aria-label="Mês anterior"
                           >
                             <ChevronLeft className="w-4 h-4" />
@@ -804,7 +804,7 @@ export default function AgendarPage() {
                             size="icon"
                             variant="ghost"
                             onClick={nextMonth}
-                            className="h-8 w-8 text-[#5C4537] hover:text-[#2D1F1A]"
+                            className="h-8 w-8 text-slate-600 hover:text-slate-900"
                             aria-label="Próximo mês"
                           >
                             <ChevronRight className="w-4 h-4" />
@@ -813,7 +813,7 @@ export default function AgendarPage() {
                       </div>
 
                       {/* Cabeçalho dos dias da semana */}
-                      <div className="grid grid-cols-7 gap-1 text-center text-[11px] font-semibold text-[#8C7A70] uppercase tracking-wider pb-1">
+                      <div className="grid grid-cols-7 gap-1 text-center text-[11px] font-semibold text-slate-500 uppercase tracking-wider pb-1">
                         <span>Dom</span>
                         <span>Seg</span>
                         <span>Ter</span>
@@ -830,7 +830,7 @@ export default function AgendarPage() {
                             return (
                               <div
                                 key={idx}
-                                className="h-10 sm:h-11 rounded-xl flex items-center justify-center text-xs text-stone-300 opacity-40 select-none"
+                                className="h-10 sm:h-11 rounded-xl flex items-center justify-center text-xs text-slate-300 opacity-40 select-none"
                               >
                                 {day.dayNum}
                               </div>
@@ -856,7 +856,7 @@ export default function AgendarPage() {
                                 <span className="w-1 h-1 rounded-full bg-teal-600 absolute bottom-1" />
                               )}{' '}
                               {day.isWednesday && (
-                                <span className="text-[7.5px] leading-none text-stone-400 font-medium">
+                                <span className="text-[7.5px] leading-none text-slate-400 font-medium">
                                   Ocupada
                                 </span>
                               )}
@@ -867,7 +867,7 @@ export default function AgendarPage() {
 
                       {/* Feedback da data escolhida */}
                       {date && (
-                        <div className="pt-2 border-t border-[#E8DFD5] flex items-center justify-between text-xs text-[#5C4537]">
+                        <div className="pt-2 border-t border-slate-200 flex items-center justify-between text-xs text-slate-700">
                           <span className="flex items-center gap-1.5">
                             <CalendarCheck className="w-4 h-4 text-emerald-600" />
                             <span>
@@ -878,7 +878,7 @@ export default function AgendarPage() {
                           <button
                             type="button"
                             onClick={() => setDate('')}
-                            className="text-[#8C3A1D] hover:underline text-[11px]"
+                            className="text-teal-800 hover:underline text-[11px] font-medium"
                           >
                             Trocar dia
                           </button>
@@ -890,17 +890,17 @@ export default function AgendarPage() {
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
                         <div>
-                          <Label className="font-serif font-bold text-sm text-[#2D1F1A] flex items-center gap-1.5">
+                          <Label className="font-bold text-sm text-slate-900 flex items-center gap-1.5">
                             <Clock className="w-4 h-4 text-teal-700" />
                             <span>Horário de Início Sugerido</span>
                           </Label>
-                          <p className="text-[11px] text-[#7B6153]">
+                          <p className="text-[11px] text-slate-600">
                             Selecione o melhor turno para a Nora iniciar em sua residência
                           </p>
                         </div>
                         <Badge
                           variant="outline"
-                          className="text-[10px] bg-white border-[#E8DFD5] text-[#8C3A1D]"
+                          className="text-[10px] bg-white border-teal-200 text-teal-800"
                         >
                           {time ? `Início às ${time}` : 'Escolha um'}
                         </Badge>
@@ -908,7 +908,7 @@ export default function AgendarPage() {
 
                       {/* Turno da Manhã */}
                       <div className="space-y-1.5">
-                        <span className="text-[11px] font-semibold text-[#8C7A70] flex items-center gap-1">
+                        <span className="text-[11px] font-semibold text-slate-600 flex items-center gap-1">
                           <Sun className="w-3.5 h-3.5 text-amber-500" /> Turno da Manhã
                         </span>
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -922,14 +922,14 @@ export default function AgendarPage() {
                                 className={`p-3 rounded-xl border text-center transition-all ${
                                   isSlotSelected
                                     ? 'bg-teal-700 text-white border-teal-700 shadow-sm ring-2 ring-teal-600/20'
-                                    : 'bg-white hover:bg-[#FAF7F2] border-[#E8DFD5] text-[#2D1F1A]'
+                                    : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-800'
                                 }`}
                               >
                                 <span className="font-bold text-sm block">{slot.label}</span>
                                 {slot.tag && (
                                   <span
                                     className={`text-[9px] block mt-0.5 ${
-                                      isSlotSelected ? 'text-white/80' : 'text-[#8C7A70]'
+                                      isSlotSelected ? 'text-white/80' : 'text-slate-500'
                                     }`}
                                   >
                                     {slot.tag}
@@ -943,7 +943,7 @@ export default function AgendarPage() {
 
                       {/* Turno da Tarde */}
                       <div className="space-y-1.5 pt-2">
-                        <span className="text-[11px] font-semibold text-[#8C7A70] flex items-center gap-1">
+                        <span className="text-[11px] font-semibold text-slate-600 flex items-center gap-1">
                           <Sunset className="w-3.5 h-3.5 text-orange-500" /> Turno da Tarde
                         </span>
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -964,7 +964,7 @@ export default function AgendarPage() {
                                 {slot.tag && (
                                   <span
                                     className={`text-[9px] block mt-0.5 ${
-                                      isSlotSelected ? 'text-white/80' : 'text-[#8C7A70]'
+                                      isSlotSelected ? 'text-white/80' : 'text-slate-500'
                                     }`}
                                   >
                                     {slot.tag}
@@ -978,8 +978,8 @@ export default function AgendarPage() {
                     </div>
 
                     {/* FREQUÊNCIA DO ATENDIMENTO (OPCIONAL/CHIPS) */}
-                    <div className="pt-2 border-t border-[#E8DFD5] space-y-2">
-                      <Label className="font-serif font-bold text-sm text-[#2D1F1A] flex items-center gap-1.5">
+                    <div className="pt-2 border-t border-slate-200 space-y-2">
+                      <Label className="font-bold text-sm text-slate-900 flex items-center gap-1.5">
                         <Repeat className="w-4 h-4 text-teal-700" />
                         <span>Frequência desejada:</span>
                       </Label>
@@ -996,8 +996,8 @@ export default function AgendarPage() {
                             onClick={() => setFrequency(item.val as any)}
                             className={`text-xs p-2.5 rounded-xl border font-medium text-center transition-all ${
                               frequency === item.val
-                                ? 'bg-[#2D1F1A] text-white border-[#2D1F1A] shadow-xs'
-                                : 'bg-[#FAF7F2] text-stone-700 border-[#E8DFD5] hover:bg-white'
+                                ? 'bg-teal-800 text-white border-teal-800 shadow-xs'
+                                : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-white'
                             }`}
                           >
                             {item.label}
@@ -1007,12 +1007,12 @@ export default function AgendarPage() {
                     </div>
 
                     {/* Botões de navegação */}
-                    <div className="pt-4 flex items-center justify-between border-t border-[#E8DFD5]">
+                    <div className="pt-4 flex items-center justify-between border-t border-slate-200">
                       <Button
                         type="button"
                         variant="ghost"
                         onClick={handlePrevStep}
-                        className="text-[#7B6153] hover:text-[#2D1F1A] rounded-full px-5"
+                        className="text-slate-600 hover:text-slate-900 rounded-full px-5"
                       >
                         <ArrowLeft className="w-4 h-4 mr-1.5" /> Voltar
                       </Button>
@@ -1034,7 +1034,7 @@ export default function AgendarPage() {
                     PASSO 3: ENDEREÇO EM PARACURU & DADOS DE CONTATO
                     ==================================================== */}
                 {currentStep === 3 && (
-                  <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E8DFD5] shadow-xs space-y-8 animate-in fade-in duration-200">
+                  <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs space-y-8 animate-in fade-in duration-200">
                     <div className="space-y-1">
                       <span className="text-xs font-bold uppercase tracking-wider text-teal-800">
                         Passo 3 de 4
@@ -1042,7 +1042,7 @@ export default function AgendarPage() {
                       <h2 className="text-2xl font-bold text-slate-900">
                         Onde e com quem será o atendimento?
                       </h2>
-                      <p className="text-xs sm:text-sm text-[#7B6153]">
+                      <p className="text-xs sm:text-sm text-slate-600">
                         Informe seu nome, WhatsApp para contato e localização exata em Paracuru.
                       </p>
                     </div>
@@ -1050,7 +1050,7 @@ export default function AgendarPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {/* Nome */}
                       <div className="space-y-1.5">
-                        <Label htmlFor="name" className="text-xs font-semibold text-stone-700">
+                        <Label htmlFor="name" className="text-xs font-semibold text-slate-700">
                           Seu Nome Completo (ou Responsável) *
                         </Label>
                         <Input
@@ -1058,14 +1058,14 @@ export default function AgendarPage() {
                           placeholder="Ex: Maria Alice Ferreira"
                           value={name}
                           onChange={(e) => setName(e.target.value)}
-                          className="bg-[#FAF7F2] border-[#E8DFD5] rounded-xl text-sm"
+                          className="bg-slate-50 border-slate-200 rounded-xl text-sm"
                           required
                         />
                       </div>
 
                       {/* WhatsApp */}
                       <div className="space-y-1.5">
-                        <Label htmlFor="phone" className="text-xs font-semibold text-stone-700">
+                        <Label htmlFor="phone" className="text-xs font-semibold text-slate-700">
                           WhatsApp / Telefone para Contato *
                         </Label>
                         <Input
@@ -1073,14 +1073,14 @@ export default function AgendarPage() {
                           placeholder="Ex: (85) 99123-4567"
                           value={phone}
                           onChange={(e) => setPhone(e.target.value)}
-                          className="bg-[#FAF7F2] border-[#E8DFD5] rounded-xl text-sm"
+                          className="bg-slate-50 border-slate-200 rounded-xl text-sm"
                           required
                         />
                       </div>
 
                       {/* E-mail opcional */}
                       <div className="space-y-1.5">
-                        <Label htmlFor="email" className="text-xs font-semibold text-stone-700">
+                        <Label htmlFor="email" className="text-xs font-semibold text-slate-700">
                           E-mail (opcional)
                         </Label>
                         <Input
@@ -1089,7 +1089,7 @@ export default function AgendarPage() {
                           placeholder="Ex: maria@exemplo.com"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          className="bg-[#FAF7F2] border-[#E8DFD5] rounded-xl text-sm"
+                          className="bg-slate-50 border-slate-200 rounded-xl text-sm"
                         />
                       </div>
 
@@ -1097,7 +1097,7 @@ export default function AgendarPage() {
                       <div className="space-y-1.5">
                         <Label
                           htmlFor="neighborhood"
-                          className="text-xs font-semibold text-stone-700"
+                          className="text-xs font-semibold text-slate-700"
                         >
                           Bairro / Região em Paracuru *
                         </Label>
@@ -1122,7 +1122,7 @@ export default function AgendarPage() {
 
                     {/* Rua e número */}
                     <div className="space-y-1.5">
-                      <Label htmlFor="address" className="text-xs font-semibold text-stone-700">
+                      <Label htmlFor="address" className="text-xs font-semibold text-slate-700">
                         Rua e Número da Residência *
                       </Label>
                       <Input
@@ -1130,14 +1130,14 @@ export default function AgendarPage() {
                         placeholder="Ex: Rua São Pedro, nº 184"
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
-                        className="bg-[#FAF7F2] border-[#E8DFD5] rounded-xl text-sm"
+                        className="bg-slate-50 border-slate-200 rounded-xl text-sm"
                         required
                       />
                     </div>
 
                     {/* Ponto de Referência */}
                     <div className="space-y-1.5">
-                      <Label htmlFor="ref" className="text-xs font-semibold text-stone-700">
+                      <Label htmlFor="ref" className="text-xs font-semibold text-slate-700">
                         Ponto de Referência em Paracuru (opcional)
                       </Label>
                       <Input
@@ -1145,17 +1145,17 @@ export default function AgendarPage() {
                         placeholder="Ex: Próximo à praça da Matriz / portão de madeira verde"
                         value={referencePoint}
                         onChange={(e) => setReferencePoint(e.target.value)}
-                        className="bg-[#FAF7F2] border-[#E8DFD5] rounded-xl text-sm"
+                        className="bg-slate-50 border-slate-200 rounded-xl text-sm"
                       />
                     </div>
 
                     {/* Botões de navegação */}
-                    <div className="pt-4 flex items-center justify-between border-t border-[#E8DFD5]">
+                    <div className="pt-4 flex items-center justify-between border-t border-slate-200">
                       <Button
                         type="button"
                         variant="ghost"
                         onClick={handlePrevStep}
-                        className="text-[#7B6153] hover:text-[#2D1F1A] rounded-full px-5"
+                        className="text-slate-600 hover:text-slate-900 rounded-full px-5"
                       >
                         <ArrowLeft className="w-4 h-4 mr-1.5" /> Voltar
                       </Button>
@@ -1177,15 +1177,15 @@ export default function AgendarPage() {
                     PASSO 4: REVISÃO & CONFIRMAÇÃO (RESUMO TOTAL ANTES DE ENVIAR)
                     ==================================================== */}
                 {currentStep === 4 && (
-                  <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E8DFD5] shadow-xs space-y-8 animate-in fade-in duration-200">
+                  <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs space-y-8 animate-in fade-in duration-200">
                     <div className="space-y-1">
                       <span className="text-xs font-bold uppercase tracking-wider text-teal-800">
-                        Passo 1 de 4 · Selecione o Serviço
+                        Passo 4 de 4 · Revisão Final
                       </span>{' '}
-                      <h2 className="font-serif text-2xl font-bold text-[#2D1F1A]">
+                      <h2 className="text-2xl font-bold text-slate-900">
                         Confira os dados do seu agendamento
                       </h2>
-                      <p className="text-xs sm:text-sm text-[#7B6153]">
+                      <p className="text-xs sm:text-sm text-slate-600">
                         Tudo pronto! Veja os detalhes antes de enviar para aprovação da Nora.
                       </p>
                     </div>
@@ -1193,20 +1193,20 @@ export default function AgendarPage() {
                     {/* Resumo detalhado em blocos limpos */}
                     <div className="space-y-4">
                       {/* Bloco Serviço & Preço */}
-                      <div className="bg-[#FAF7F2] rounded-2xl p-5 border border-[#E8DFD5] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                      <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                         <div className="space-y-1">
-                          <span className="text-[10px] uppercase font-bold text-[#8C3A1D] tracking-wider block">
+                          <span className="text-[10px] uppercase font-bold text-teal-800 tracking-wider block">
                             Serviço Selecionado
                           </span>
-                          <h3 className="font-serif font-bold text-lg text-[#2D1F1A]">
+                          <h3 className="font-bold text-lg text-slate-900">
                             {selectedService.name}
                           </h3>
-                          <p className="text-xs text-[#7B6153] max-w-md">
+                          <p className="text-xs text-slate-600 max-w-md">
                             {selectedService.description}
                           </p>
                         </div>
-                        <div className="text-right sm:border-l sm:border-[#E8DFD5] sm:pl-6 shrink-0">
-                          <span className="text-[11px] text-[#7B6153] block">
+                        <div className="text-right sm:border-l sm:border-slate-200 sm:pl-6 shrink-0">
+                          <span className="text-[11px] text-slate-500 block">
                             Valor Fixo Inicial
                           </span>
                           <span className="font-bold text-2xl text-teal-800">
@@ -1216,47 +1216,47 @@ export default function AgendarPage() {
                             })}
                           </span>
                           {selectedService.priceType === 'monthly_fixed' && (
-                            <span className="text-[11px] text-[#7B6153] block">/mês (dia 03)</span>
+                            <span className="text-[11px] text-slate-500 block">/mês (dia 03)</span>
                           )}
                         </div>
                       </div>
 
                       {/* Bloco Data, Horário e Local */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div className="bg-[#FAF7F2] rounded-2xl p-4 border border-[#E8DFD5] space-y-1.5">
-                          <span className="text-[10px] uppercase font-bold text-[#8C3A1D] tracking-wider flex items-center gap-1">
+                        <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200 space-y-1.5">
+                          <span className="text-[10px] uppercase font-bold text-teal-800 tracking-wider flex items-center gap-1">
                             <CalendarIcon className="w-3.5 h-3.5" /> Data &amp; Horário
                           </span>
-                          <p className="font-semibold text-sm text-[#2D1F1A] capitalize">
+                          <p className="font-semibold text-sm text-slate-900 capitalize">
                             {readableDate}
                           </p>
-                          <p className="text-xs text-[#7B6153]">
+                          <p className="text-xs text-slate-600">
                             Horário de início: <strong>{time}</strong> · Frequência:{' '}
                             <strong>{frequency}</strong>
                           </p>
                         </div>
 
-                        <div className="bg-[#FAF7F2] rounded-2xl p-4 border border-[#E8DFD5] space-y-1.5">
-                          <span className="text-[10px] uppercase font-bold text-[#8C3A1D] tracking-wider flex items-center gap-1">
+                        <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200 space-y-1.5">
+                          <span className="text-[10px] uppercase font-bold text-teal-800 tracking-wider flex items-center gap-1">
                             <MapPin className="w-3.5 h-3.5" /> Local em Paracuru
                           </span>
-                          <p className="font-semibold text-sm text-[#2D1F1A]">{address}</p>
-                          <p className="text-xs text-[#7B6153]">
+                          <p className="font-semibold text-sm text-slate-900">{address}</p>
+                          <p className="text-xs text-slate-600">
                             {neighborhood} {referencePoint && `· Ref: ${referencePoint}`}
                           </p>
                         </div>
                       </div>
 
                       {/* Bloco: O que precisa fazer */}
-                      <div className="bg-[#FAF7F2] rounded-2xl p-4 border border-[#E8DFD5] space-y-1.5">
-                        <span className="text-[10px] uppercase font-bold text-[#8C3A1D] tracking-wider flex items-center gap-1">
+                      <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200 space-y-1.5">
+                        <span className="text-[10px] uppercase font-bold text-teal-800 tracking-wider flex items-center gap-1">
                           <FileText className="w-3.5 h-3.5" /> O que precisa fazer / Observações
                         </span>
-                        <p className="text-xs text-[#372A24] leading-relaxed">
+                        <p className="text-xs text-slate-800 leading-relaxed">
                           {needsDescription ? (
                             <span>"{needsDescription}"</span>
                           ) : (
-                            <span className="text-stone-400 italic">
+                            <span className="text-slate-400 italic">
                               Nenhuma observação especial inserida. O atendimento seguirá a rotina
                               padrão de capricho da Nora.
                             </span>
@@ -1265,13 +1265,13 @@ export default function AgendarPage() {
                       </div>
 
                       {/* Bloco: Contato */}
-                      <div className="bg-[#FAF7F2] rounded-2xl p-4 border border-[#E8DFD5] flex items-center justify-between text-xs">
+                      <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200 flex items-center justify-between text-xs">
                         <div className="space-y-0.5">
-                          <span className="text-[10px] uppercase font-bold text-[#8C3A1D] tracking-wider block">
+                          <span className="text-[10px] uppercase font-bold text-teal-800 tracking-wider block">
                             Cliente / Responsável
                           </span>
-                          <p className="font-semibold text-[#2D1F1A]">{name}</p>
-                          <p className="text-[#7B6153]">{phone}</p>
+                          <p className="font-semibold text-slate-900">{name}</p>
+                          <p className="text-slate-600">{phone}</p>
                         </div>
                         <Button
                           type="button"
@@ -1302,12 +1302,12 @@ export default function AgendarPage() {
                     </div>
 
                     {/* Botões de navegação e submissão */}
-                    <div className="pt-4 flex items-center justify-between border-t border-[#E8DFD5]">
+                    <div className="pt-4 flex items-center justify-between border-t border-slate-200">
                       <Button
                         type="button"
                         variant="ghost"
                         onClick={handlePrevStep}
-                        className="text-[#7B6153] hover:text-[#2D1F1A] rounded-full px-5"
+                        className="text-slate-600 hover:text-slate-900 rounded-full px-5"
                       >
                         <ArrowLeft className="w-4 h-4 mr-1.5" /> Voltar
                       </Button>
@@ -1334,24 +1334,22 @@ export default function AgendarPage() {
 
               {/* COLUNA LATERAL: RESUMO FLUTUANTE (ESTILO PARAFUZO) */}
               <div className="lg:col-span-4 space-y-4 lg:sticky lg:top-24">
-                <div className="bg-white rounded-3xl p-6 border border-[#E8DFD5] shadow-xs space-y-5">
-                  <div className="flex items-center justify-between pb-3 border-b border-[#E8DFD5]">
-                    <h3 className="font-serif font-bold text-base text-[#2D1F1A]">
-                      Resumo do Pedido
-                    </h3>
-                    <Badge className="bg-[#FAF7F2] border-[#E8DFD5] text-[#8C3A1D] text-[10px]">
+                <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs space-y-5">
+                  <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+                    <h3 className="font-bold text-base text-slate-900">Resumo do Pedido</h3>
+                    <Badge className="bg-slate-100 border-slate-200 text-slate-700 text-[10px]">
                       Paracuru · CE
                     </Badge>
                   </div>
 
                   {/* Detalhes acumulados */}
-                  <div className="space-y-3.5 text-xs text-[#372A24]">
+                  <div className="space-y-3.5 text-xs text-slate-800">
                     {/* Serviço */}
                     <div className="space-y-1">
-                      <span className="text-[10px] uppercase font-bold text-[#8C7A70] tracking-wider block">
+                      <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block">
                         Serviço
                       </span>
-                      <p className="font-semibold text-sm text-[#2D1F1A]">{selectedService.name}</p>
+                      <p className="font-semibold text-sm text-slate-900">{selectedService.name}</p>
                       <span className="inline-block text-[10px] text-teal-800 bg-teal-50 px-2 py-0.5 rounded font-medium border border-teal-100">
                         {selectedService.category === 'idosos'
                           ? 'Cuidado de Idosos'
@@ -1362,29 +1360,29 @@ export default function AgendarPage() {
                     </div>
 
                     {/* Data & Horário */}
-                    <div className="space-y-1 pt-2 border-t border-[#E8DFD5]">
-                      <span className="text-[10px] uppercase font-bold text-[#8C7A70] tracking-wider block">
+                    <div className="space-y-1 pt-2 border-t border-slate-200">
+                      <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block">
                         Quando
                       </span>
                       {date ? (
-                        <p className="font-semibold text-xs text-[#2D1F1A] capitalize flex items-center gap-1.5">
+                        <p className="font-semibold text-xs text-slate-900 capitalize flex items-center gap-1.5">
                           <CalendarCheck className="w-3.5 h-3.5 text-emerald-600" />
                           <span>
                             {readableDate} às {time}
                           </span>
                         </p>
                       ) : (
-                        <p className="text-xs text-stone-400 italic">Selecione no passo 2</p>
+                        <p className="text-xs text-slate-400 italic">Selecione no passo 2</p>
                       )}
                     </div>
 
                     {/* O que precisa fazer */}
                     {needsDescription && (
-                      <div className="space-y-1 pt-2 border-t border-[#E8DFD5]">
-                        <span className="text-[10px] uppercase font-bold text-[#8C7A70] tracking-wider block">
+                      <div className="space-y-1 pt-2 border-t border-slate-200">
+                        <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block">
                           O que precisa fazer
                         </span>
-                        <p className="text-[11px] text-[#5C4537] line-clamp-3 italic">
+                        <p className="text-[11px] text-slate-700 line-clamp-3 italic">
                           "{needsDescription}"
                         </p>
                       </div>
@@ -1392,19 +1390,19 @@ export default function AgendarPage() {
 
                     {/* Endereço */}
                     {address && (
-                      <div className="space-y-1 pt-2 border-t border-[#E8DFD5]">
-                        <span className="text-[10px] uppercase font-bold text-[#8C7A70] tracking-wider block">
+                      <div className="space-y-1 pt-2 border-t border-slate-200">
+                        <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block">
                           Endereço
                         </span>
-                        <p className="text-xs text-[#2D1F1A] font-medium truncate">{address}</p>
-                        <p className="text-[11px] text-[#7B6153]">{neighborhood}</p>
+                        <p className="text-xs text-slate-900 font-medium truncate">{address}</p>
+                        <p className="text-[11px] text-slate-500">{neighborhood}</p>
                       </div>
                     )}
 
                     {/* Valor Estimado / Fixo */}
-                    <div className="pt-3 border-t border-[#E8DFD5] space-y-1">
+                    <div className="pt-3 border-t border-slate-200 space-y-1">
                       <div className="flex items-baseline justify-between">
-                        <span className="text-xs text-[#7B6153]">Valor Fixo Inicial:</span>
+                        <span className="text-xs text-slate-500">Valor Fixo Inicial:</span>
                         <span className="font-bold text-xl text-teal-800">
                           R${' '}
                           {selectedService.basePrice.toLocaleString('pt-BR', {
@@ -1412,7 +1410,7 @@ export default function AgendarPage() {
                           })}
                         </span>
                       </div>
-                      <p className="text-[10px] text-[#8C7A70] leading-snug">
+                      <p className="text-[10px] text-slate-500 leading-snug">
                         Pagamento liberado após aprovação da Nora via MercadoPago (modo teste).
                       </p>
                     </div>
@@ -1442,12 +1440,12 @@ export default function AgendarPage() {
                 </div>
 
                 {/* Card de confiança Nora */}
-                <div className="bg-[#FAF7F2] rounded-2xl p-4 border border-[#E8DFD5] text-xs text-[#5C4537] space-y-2">
-                  <div className="flex items-center gap-2 font-bold text-[#2D1F1A]">
+                <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200 text-xs text-slate-700 space-y-2">
+                  <div className="flex items-center gap-2 font-bold text-slate-900">
                     <ShieldCheck className="w-4 h-4 text-emerald-600" />
                     <span>Garantia de Atenção &amp; Respeito</span>
                   </div>
-                  <p className="text-[11px] text-[#7B6153] leading-relaxed">
+                  <p className="text-[11px] text-slate-600 leading-relaxed">
                     A Nora é diarista e cuidadora com anos de confiança comprovada pelas famílias de
                     Paracuru. Sua reserva é tratada com total carinho e pontualidade.
                   </p>

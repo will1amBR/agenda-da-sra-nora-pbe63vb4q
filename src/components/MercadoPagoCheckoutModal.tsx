@@ -176,7 +176,7 @@ export default function MercadoPagoCheckoutModal({
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl border border-[#E8DFD5] overflow-hidden max-w-2xl mx-auto">
+    <div className="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden max-w-2xl mx-auto">
       {/* Top Header com Marca MercadoPago e Badge Teste */}
       <div className="bg-gradient-to-r from-[#009EE3] to-[#007CB9] text-white p-5">
         <div className="flex items-center justify-between">
@@ -226,14 +226,14 @@ export default function MercadoPagoCheckoutModal({
             </div>
             <div>
               <h3 className="text-2xl font-bold text-slate-900">Pagamento Aprovado com Sucesso!</h3>
-              <p className="text-sm text-[#7B6153] mt-1 max-w-md mx-auto">
+              <p className="text-sm text-slate-600 mt-1 max-w-md mx-auto">
                 Seu agendamento <strong>#{booking.code}</strong> foi registrado como{' '}
                 <span className="text-emerald-700 font-semibold">Confirmado</span> na agenda da Sra
                 Nora em Paracuru.
               </p>
             </div>
 
-            <div className="bg-[#FAF7F2] border border-[#E8DFD5] rounded-xl p-4 max-w-sm mx-auto text-left text-xs space-y-2">
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 max-w-sm mx-auto text-left text-xs space-y-2">
               <div className="flex justify-between">
                 <span className="text-stone-500">ID da Transação:</span>
                 <span className="font-mono font-medium">{paymentResult.transactionId}</span>
@@ -275,7 +275,7 @@ export default function MercadoPagoCheckoutModal({
             value={activeTab}
             onValueChange={(val) => setActiveTab(val as 'credit_card' | 'pix')}
           >
-            <TabsList className="grid grid-cols-2 mb-6 bg-[#FAF7F2] p-1 border border-[#EADFD5]">
+            <TabsList className="grid grid-cols-2 mb-6 bg-slate-100 p-1 border border-slate-200">
               <TabsTrigger
                 value="pix"
                 className="data-[state=active]:bg-[#009EE3] data-[state=active]:text-white font-medium flex items-center gap-2"
@@ -340,16 +340,16 @@ export default function MercadoPagoCheckoutModal({
               </div>
 
               {/* Bloco Chave PIX da Nora (Telefone) */}
-              <div className="bg-[#FAF7F2] border border-[#E8DFD5] rounded-xl p-3.5 space-y-2 text-left">
+              <div className="bg-slate-50 border border-slate-200 rounded-xl p-3.5 space-y-2 text-left">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-[#8C3A1D] uppercase tracking-wider">
+                  <span className="text-xs font-semibold text-teal-800 uppercase tracking-wider">
                     Chave PIX da Sra Nora (Telefone Celular)
                   </span>
-                  <span className="text-[11px] text-stone-500 bg-white px-2 py-0.5 rounded border border-[#E8DFD5]">
+                  <span className="text-[11px] text-slate-500 bg-white px-2 py-0.5 rounded border border-slate-200">
                     Favorecida: Nora
                   </span>
                 </div>
-                <div className="flex items-center justify-between gap-3 bg-white p-2.5 rounded-lg border border-[#E8DFD5]">
+                <div className="flex items-center justify-between gap-3 bg-white p-2.5 rounded-lg border border-slate-200">
                   <div>
                     <span className="text-xs text-stone-500 block text-[11px]">
                       Chave para transferência:
@@ -380,7 +380,7 @@ export default function MercadoPagoCheckoutModal({
                   <Input
                     readOnly
                     value={pixData.pixCopyPaste}
-                    className="font-mono text-xs bg-[#FAF7F2] text-stone-600 truncate select-all"
+                    className="font-mono text-xs bg-slate-50 text-slate-700 truncate select-all"
                   />
                   <Button
                     type="button"
@@ -531,7 +531,7 @@ export default function MercadoPagoCheckoutModal({
                     id="installments"
                     value={installments}
                     onChange={(e) => setInstallments(Number(e.target.value))}
-                    className="w-full mt-1 border border-[#EADFD5] rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#009EE3]"
+                    className="w-full mt-1 border border-slate-200 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#009EE3]"
                   >
                     <option value={1}>
                       1x de R${' '}
@@ -591,7 +591,7 @@ export default function MercadoPagoCheckoutModal({
       </div>
 
       {/* Footer do Modal */}
-      <div className="bg-[#FAF7F2] border-t border-[#E8DFD5] px-6 py-3 flex items-center justify-between text-[11px] text-stone-500">
+      <div className="bg-slate-50 border-t border-slate-200 px-6 py-3 flex items-center justify-between text-[11px] text-slate-500">
         <span className="flex items-center gap-1">
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
           Conexão Segura Criptografada (Simulação)
