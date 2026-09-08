@@ -14,14 +14,18 @@ import {
   Layers,
   Menu,
   X,
+  MessageSquare,
+  BellRing,
 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { getBookings, resetDemoData } from '@/lib/data'
+import { computeRemindersList } from '@/lib/reminders'
 import { useToast } from '@/hooks/use-toast'
 
 export default function AdminLayout() {
   const [pendingCount, setPendingCount] = useState(0)
+  const [pendingRemindersCount, setPendingRemindersCount] = useState(0)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const location = useLocation()
   const { toast } = useToast()
@@ -30,6 +34,11 @@ export default function AdminLayout() {
     const bookings = getBookings()
     const pending = bookings.filter((b) => b.status === 'aguardando_aprovacao').length
     setPendingCount(pending)
+
+    // Lembretes pendentes de envio
+    const reminders = computeRemindersList()
+    const unsent = reminders.filter((r) => !r.alreadySent).length
+    setPendingRemindersCount(unsent)
   }
 
   useEffect(() => {
@@ -81,6 +90,12 @@ export default function AdminLayout() {
       icon: Calendar,
     },
     {
+      to: '/painel/lembretes',
+      label: 'Lembretes WhatsApp',
+      icon: MessageSquare,
+      badge: pendingRemindersCount > 0 ? pendingRemindersCount : null,
+    },
+    {
       to: '/painel/pagamentos',
       label: 'Histórico & MercadoPago',
       icon: CreditCard,
@@ -88,26 +103,24 @@ export default function AdminLayout() {
   ]
 
   return (
-    <div className="min-h-screen bg-[#F4EFEA] text-[#2D1F1A] flex flex-col md:flex-row">
-      {/* Sidebar Desktop Fixa (Espresso) */}
-      <aside className="hidden md:flex md:w-64 flex-col bg-[#2D1F1A] text-[#EADFD5] border-r border-[#402E26] shrink-0 sticky top-0 h-screen">
+    <div className="min-h-screen bg-[#F6F8F7] text-slate-800 flex flex-col md:flex-row">
+      {/* Sidebar Desktop Fixa (Ardósia/Teal Profundo Moderno) */}
+      <aside className="hidden md:flex md:w-64 flex-col bg-[#122026] text-slate-200 border-r border-[#1B2F38] shrink-0 sticky top-0 h-screen">
         {/* Topo Brand */}
-        <div className="p-6 border-b border-[#402E26]">
+        <div className="p-6 border-b border-[#1B2F38]">
           <Link to="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-[#B8502E] text-white flex items-center justify-center font-serif text-xl font-bold shadow">
+            <div className="w-10 h-10 rounded-2xl bg-teal-600 text-white flex items-center justify-center font-bold text-lg shadow-sm">
               N
             </div>
             <div>
-              <span className="font-serif text-xl font-bold text-white tracking-tight">
-                Agenda Nora
-              </span>
-              <p className="text-[11px] text-[#A8988C] uppercase tracking-wider font-semibold">
+              <span className="text-lg font-bold text-white tracking-tight">Agenda Nora</span>
+              <p className="text-[11px] text-teal-300 uppercase tracking-wider font-semibold">
                 Painel Administrativo
               </p>
             </div>
           </Link>
-          <div className="mt-3 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-medium">
-            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+          <div className="mt-3 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-300 text-xs font-medium">
+            <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse" />
             <span>MercadoPago MODO TESTE</span>
           </div>
         </div>
@@ -124,8 +137,8 @@ export default function AdminLayout() {
                 className={({ isActive }) =>
                   `flex items-center justify-between px-3.5 py-3 rounded-xl text-sm font-medium transition-all ${
                     isActive
-                      ? 'bg-[#B8502E] text-white shadow-sm'
-                      : 'text-[#C8B8AC] hover:bg-[#3D2C24] hover:text-white'
+                      ? 'bg-teal-700 text-white shadow-sm'
+                      : 'text-slate-300 hover:bg-[#1A2E37] hover:text-white'
                   }`
                 }
               >
@@ -134,7 +147,7 @@ export default function AdminLayout() {
                   <span>{item.label}</span>
                 </div>
                 {item.badge ? (
-                  <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-white text-[#B8502E]">
+                  <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-white text-teal-800">
                     {item.badge}
                   </span>
                 ) : null}
@@ -144,11 +157,11 @@ export default function AdminLayout() {
         </nav>
 
         {/* Rodapé da Sidebar */}
-        <div className="p-4 border-t border-[#402E26] space-y-2">
+        <div className="p-4 border-t border-[#1B2F38] space-y-2">
           <Button
             asChild
             variant="ghost"
-            className="w-full justify-start text-[#C8B8AC] hover:text-white hover:bg-[#3D2C24] text-xs h-9"
+            className="w-full justify-start text-slate-300 hover:text-white hover:bg-[#1A2E37] text-xs h-9"
           >
             <Link to="/">
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -159,33 +172,33 @@ export default function AdminLayout() {
           <Button
             variant="ghost"
             onClick={handleResetData}
-            className="w-full justify-start text-[#A8988C] hover:text-amber-200 hover:bg-[#3D2C24] text-[11px] h-8"
+            className="w-full justify-start text-slate-400 hover:text-amber-200 hover:bg-[#1A2E37] text-[11px] h-8"
           >
             <RotateCcw className="w-3.5 h-3.5 mr-2" />
-            Restaurar Dados Demonstração
+            Restaurar Demonstração
           </Button>
 
-          <p className="text-[10px] text-[#8C7A70] text-center pt-1">
+          <p className="text-[10px] text-slate-500 text-center pt-1">
             Paracuru, CE · Cuidado &amp; Limpeza
           </p>
         </div>
       </aside>
 
       {/* Mobile Top Bar */}
-      <div className="md:hidden bg-[#2D1F1A] text-white p-4 flex items-center justify-between sticky top-0 z-40 border-b border-[#402E26]">
+      <div className="md:hidden bg-[#122026] text-white p-4 flex items-center justify-between sticky top-0 z-40 border-b border-[#1B2F38]">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-full bg-[#B8502E] text-white flex items-center justify-center font-serif font-bold text-sm">
+          <div className="w-8 h-8 rounded-xl bg-teal-600 text-white flex items-center justify-center font-bold text-sm">
             N
           </div>
           <div>
-            <h1 className="font-serif font-bold text-base leading-tight">Painel da Nora</h1>
-            <p className="text-[10px] text-amber-300 font-mono">Modo Teste</p>
+            <h1 className="font-bold text-base leading-tight">Painel da Nora</h1>
+            <p className="text-[10px] text-teal-300 font-mono">Modo Teste</p>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
           {pendingCount > 0 && (
-            <Badge className="bg-[#B8502E] text-white text-xs">
+            <Badge className="bg-teal-700 text-white text-xs">
               {pendingCount} pendente{pendingCount > 1 ? 's' : ''}
             </Badge>
           )}
@@ -193,7 +206,7 @@ export default function AdminLayout() {
             variant="ghost"
             size="icon"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="text-white hover:bg-[#3D2C24]"
+            className="text-white hover:bg-[#1A2E37]"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </Button>
@@ -202,7 +215,7 @@ export default function AdminLayout() {
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-[#2D1F1A] text-[#EADFD5] border-b border-[#402E26] p-4 space-y-2 z-30">
+        <div className="md:hidden bg-[#122026] text-slate-200 border-b border-[#1B2F38] p-4 space-y-2 z-30">
           {navLinks.map((item) => {
             const Icon = item.icon
             return (
@@ -213,7 +226,7 @@ export default function AdminLayout() {
                 onClick={() => setMobileMenuOpen(false)}
                 className={({ isActive }) =>
                   `flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium ${
-                    isActive ? 'bg-[#B8502E] text-white' : 'text-[#C8B8AC] hover:bg-[#3D2C24]'
+                    isActive ? 'bg-teal-700 text-white' : 'text-slate-300 hover:bg-[#1A2E37]'
                   }`
                 }
               >
@@ -222,23 +235,23 @@ export default function AdminLayout() {
                   <span>{item.label}</span>
                 </div>
                 {item.badge ? (
-                  <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-white text-[#B8502E]">
+                  <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-white text-teal-800">
                     {item.badge}
                   </span>
                 ) : null}
               </NavLink>
             )
           })}
-          <div className="pt-2 border-t border-[#402E26] flex justify-between">
+          <div className="pt-2 border-t border-[#1B2F38] flex justify-between">
             <Link
               to="/"
-              className="text-xs text-[#C8B8AC] hover:text-white flex items-center gap-1"
+              className="text-xs text-slate-300 hover:text-white flex items-center gap-1"
             >
               <ArrowLeft className="w-3.5 h-3.5" /> Site público
             </Link>
             <button
               onClick={handleResetData}
-              className="text-xs text-[#A8988C] hover:text-amber-200"
+              className="text-xs text-slate-400 hover:text-amber-200"
             >
               Resetar demonstração
             </button>
@@ -249,19 +262,17 @@ export default function AdminLayout() {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Admin Header Bar */}
-        <header className="bg-white/90 backdrop-blur-sm border-b border-[#E8DFD5] px-6 py-4 flex flex-wrap items-center justify-between gap-3 sticky top-0 md:static z-20">
+        <header className="bg-white/95 backdrop-blur-sm border-b border-slate-200/80 px-6 py-4 flex flex-wrap items-center justify-between gap-3 sticky top-0 md:static z-20">
           <div>
-            <span className="text-xs font-medium text-[#8C7A70] uppercase tracking-wider block">
+            <span className="text-xs font-medium text-slate-500 uppercase tracking-wider block">
               Gestão de Atendimentos
             </span>
-            <p className="text-sm font-serif font-bold text-[#2D1F1A] capitalize">
-              {todayFormatted}
-            </p>
+            <p className="text-sm font-bold text-slate-900 capitalize">{todayFormatted}</p>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-300 text-amber-800 text-xs font-medium">
-              <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-900 text-xs font-medium">
+              <span className="w-2 h-2 rounded-full bg-teal-600 animate-pulse" />
               <span>MercadoPago em Modo de Simulação</span>
             </div>
 
@@ -269,7 +280,7 @@ export default function AdminLayout() {
               asChild
               variant="outline"
               size="sm"
-              className="border-[#D6C7BA] text-[#594437] hover:bg-[#FAF7F2] text-xs h-8"
+              className="border-slate-300 text-slate-700 hover:bg-slate-50 text-xs h-8"
             >
               <Link to="/">Ver Site</Link>
             </Button>
@@ -282,7 +293,7 @@ export default function AdminLayout() {
         </main>
 
         {/* Admin Footer */}
-        <footer className="px-6 py-3 border-t border-[#E8DFD5] bg-white/50 text-[11px] text-[#8C7A70] flex flex-wrap justify-between items-center gap-2">
+        <footer className="px-6 py-3 border-t border-slate-200 bg-white/60 text-[11px] text-slate-500 flex flex-wrap justify-between items-center gap-2">
           <span>Dados armazenados localmente no navegador (localStorage).</span>
           <span>Sra Nora · Paracuru (Ceará) · Limpeza &amp; Cuidado de Idosos</span>
         </footer>

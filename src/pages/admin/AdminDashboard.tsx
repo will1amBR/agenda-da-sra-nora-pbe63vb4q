@@ -57,10 +57,8 @@ export default function AdminDashboardPage() {
       {/* Header Topo do Dashboard */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#2D1F1A]">
-            Visão Geral · Sra Nora
-          </h1>
-          <p className="text-xs sm:text-sm text-[#7B6153]">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">Visão Geral · Sra Nora</h1>
+          <p className="text-xs sm:text-sm text-slate-600">
             Acompanhamento em tempo real dos serviços de cuidado e limpeza em Paracuru (CE).
           </p>
         </div>
@@ -68,7 +66,7 @@ export default function AdminDashboardPage() {
         <div className="flex items-center gap-2">
           <Button
             asChild
-            className="bg-[#B8502E] hover:bg-[#A04223] text-white rounded-xl text-xs h-9 shadow-sm"
+            className="bg-teal-700 hover:bg-teal-800 text-white rounded-xl text-xs h-9 shadow-sm"
           >
             <Link to="/painel/solicitacoes">
               <Inbox className="w-3.5 h-3.5 mr-1.5" />
@@ -81,74 +79,70 @@ export default function AdminDashboardPage() {
       {/* CARDS DE MÉTRICAS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Card 1: Pendentes de Aprovação */}
-        <Card className="border-[#EADFD5] bg-white rounded-2xl shadow-xs">
+        <Card className="border-slate-200 bg-white rounded-2xl shadow-xs">
           <CardContent className="p-5 flex items-center justify-between">
             <div className="space-y-1">
               <span className="text-[11px] font-semibold uppercase text-amber-700 tracking-wider">
                 Aguardando Nora
               </span>
-              <p className="font-serif text-3xl font-bold text-[#2D1F1A]">
-                {pendingRequests.length}
-              </p>
-              <p className="text-[11px] text-[#7B6153]">Para aprovar ou negociar</p>
+              <p className="text-3xl font-bold text-slate-900">{pendingRequests.length}</p>
+              <p className="text-[11px] text-slate-500">Para aprovar ou negociar</p>
             </div>
-            <div className="w-12 h-12 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-800 flex items-center justify-center">
               <Inbox className="w-6 h-6" />
             </div>
           </CardContent>
         </Card>
 
         {/* Card 2: Em Negociação ou Aguardando Pagamento */}
-        <Card className="border-[#EADFD5] bg-white rounded-2xl shadow-xs">
+        <Card className="border-slate-200 bg-white rounded-2xl shadow-xs">
           <CardContent className="p-5 flex items-center justify-between">
             <div className="space-y-1">
-              <span className="text-[11px] font-semibold uppercase text-purple-700 tracking-wider">
+              <span className="text-[11px] font-semibold uppercase text-teal-700 tracking-wider">
                 Em Andamento
               </span>
-              <p className="font-serif text-3xl font-bold text-[#2D1F1A]">
+              <p className="text-3xl font-bold text-slate-900">
                 {negotiatingBookings.length + waitingPayment.length}
               </p>
-              <p className="text-[11px] text-[#7B6153]">
+              <p className="text-[11px] text-slate-500">
                 {negotiatingBookings.length} negociação · {waitingPayment.length} aguardando pagto
               </p>
             </div>
-            <div className="w-12 h-12 rounded-xl bg-purple-100 text-purple-800 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-teal-50 text-teal-800 flex items-center justify-center">
               <Clock className="w-6 h-6" />
             </div>
           </CardContent>
         </Card>
 
         {/* Card 3: Confirmados na Agenda */}
-        <Card className="border-[#EADFD5] bg-white rounded-2xl shadow-xs">
+        <Card className="border-slate-200 bg-white rounded-2xl shadow-xs">
           <CardContent className="p-5 flex items-center justify-between">
             <div className="space-y-1">
               <span className="text-[11px] font-semibold uppercase text-emerald-700 tracking-wider">
                 Confirmados
               </span>
-              <p className="font-serif text-3xl font-bold text-[#2D1F1A]">
-                {confirmedBookings.length}
-              </p>
-              <p className="text-[11px] text-[#7B6153]">Horários pagos e garantidos</p>
+              <p className="text-3xl font-bold text-slate-900">{confirmedBookings.length}</p>
+              <p className="text-[11px] text-slate-500">Horários pagos e garantidos</p>
             </div>
-            <div className="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-800 flex items-center justify-center">
               <CheckCircle2 className="w-6 h-6" />
             </div>
           </CardContent>
         </Card>
 
         {/* Card 4: Faturamento Simulado */}
-        <Card className="border-[#EADFD5] bg-white rounded-2xl shadow-xs">
+        <Card className="border-slate-200 bg-white rounded-2xl shadow-xs">
           <CardContent className="p-5 flex items-center justify-between">
             <div className="space-y-1">
               <span className="text-[11px] font-semibold uppercase text-sky-700 tracking-wider">
                 Faturamento (MP Test)
               </span>
-              <p className="font-serif text-2xl font-bold text-[#2D1F1A]">
+              <p className="text-2xl font-bold text-slate-900">
                 R$ {totalReceived.toLocaleString('pt-BR', { minimumFractionDigits: 0 })}
               </p>
-              <p className="text-[11px] text-[#7B6153]">{payments.length} transação(ões) pagas</p>
+              <p className="text-[11px] text-slate-500">{payments.length} transação(ões) pagas</p>
             </div>
-            <div className="w-12 h-12 rounded-xl bg-sky-100 text-[#009EE3] flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-sky-50 text-[#009EE3] flex items-center justify-center">
               <CreditCard className="w-6 h-6" />
             </div>
           </CardContent>
@@ -157,16 +151,16 @@ export default function AdminDashboardPage() {
 
       {/* AVISO DE SOLICITAÇÕES QUE PRECISAM DE AÇÃO URGENTE */}
       {pendingRequests.length > 0 && (
-        <div className="bg-[#FAF0E6] border border-[#E4C8B5] rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="bg-amber-50/70 border border-amber-200 rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-start gap-3">
-            <div className="w-9 h-9 rounded-full bg-[#B8502E] text-white flex items-center justify-center shrink-0 mt-0.5">
+            <div className="w-9 h-9 rounded-full bg-amber-600 text-white flex items-center justify-center shrink-0 mt-0.5">
               <AlertCircle className="w-5 h-5" />
             </div>
             <div className="space-y-0.5">
-              <h3 className="font-serif font-bold text-sm text-[#2D1F1A]">
+              <h3 className="font-bold text-sm text-slate-900">
                 Você tem {pendingRequests.length} solicitação(ões) pendente(s) de aprovação!
               </h3>
-              <p className="text-xs text-[#6B5345]">
+              <p className="text-xs text-slate-600">
                 O cliente está aguardando você aprovar o preço fixo ou sugerir outro valor conforme
                 o tamanho da casa ou a rotina do idoso.
               </p>
@@ -176,7 +170,7 @@ export default function AdminDashboardPage() {
           <Button
             asChild
             size="sm"
-            className="bg-[#B8502E] hover:bg-[#A04223] text-white shrink-0 rounded-xl text-xs"
+            className="bg-amber-700 hover:bg-amber-800 text-white shrink-0 rounded-xl text-xs"
           >
             <Link to="/painel/solicitacoes">
               <span>Analisar Agora</span>
@@ -189,19 +183,19 @@ export default function AdminDashboardPage() {
       {/* SEÇÃO DUPLA: PRÓXIMOS ATENDIMENTOS & ÚLTIMAS TRANSAÇÕES MERCADOPAGO */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Próximos Atendimentos Confirmados */}
-        <Card className="border-[#EADFD5] bg-white rounded-2xl shadow-xs">
-          <div className="p-5 border-b border-[#EADFD5] flex items-center justify-between">
+        <Card className="border-slate-200 bg-white rounded-2xl shadow-xs">
+          <div className="p-5 border-b border-slate-100 flex items-center justify-between">
             <div>
-              <h3 className="font-serif font-bold text-base text-[#2D1F1A]">
+              <h3 className="font-bold text-base text-slate-900">
                 Próximos Atendimentos Confirmados
               </h3>
-              <p className="text-[11px] text-[#7B6153]">Compromissos garantidos na agenda</p>
+              <p className="text-[11px] text-slate-500">Compromissos garantidos na agenda</p>
             </div>
             <Button
               asChild
               variant="ghost"
               size="sm"
-              className="text-xs text-[#B8502E] hover:text-[#8C3A1D]"
+              className="text-xs text-teal-700 hover:text-teal-900"
             >
               <Link to="/painel/agenda">Ver agenda completa →</Link>
             </Button>
@@ -209,36 +203,39 @@ export default function AdminDashboardPage() {
 
           <CardContent className="p-5 space-y-3">
             {upcomingConfirmed.length === 0 ? (
-              <p className="text-xs text-[#7B6153] py-4 text-center">
+              <p className="text-xs text-slate-500 py-4 text-center">
                 Nenhum atendimento confirmado no momento.
               </p>
             ) : (
               upcomingConfirmed.slice(0, 4).map((b) => (
                 <div
                   key={b.id}
-                  className="bg-[#FAF7F2] p-3.5 rounded-xl border border-[#EADFD5] flex items-center justify-between gap-3 text-xs"
+                  className="bg-slate-50/70 p-3.5 rounded-xl border border-slate-100 flex items-center justify-between gap-3 text-xs"
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-[#2D1F1A]">{b.client.name}</span>
-                      <span className="font-mono text-[10px] text-[#B8502E]">#{b.code}</span>
+                      <span className="font-bold text-slate-900">{b.client.name}</span>
+                      <span className="font-mono text-[10px] text-teal-700">#{b.code}</span>
+                      {b.isRecurringFixed && (
+                        <span className="text-[9.5px] bg-teal-100 text-teal-900 font-bold px-1.5 py-0.2 rounded">
+                          Fixo
+                        </span>
+                      )}
                     </div>
-                    <p className="text-[#6B5345] flex items-center gap-1.5">
-                      <Calendar className="w-3 h-3 text-[#B8502E]" />
+                    <p className="text-slate-600 flex items-center gap-1.5">
+                      <Calendar className="w-3 h-3 text-teal-600" />
                       <span>
                         {new Date(b.date + 'T12:00:00').toLocaleDateString('pt-BR')} às {b.time}
                       </span>
                     </p>
-                    <p className="text-[11px] text-[#8C7A70] flex items-center gap-1">
+                    <p className="text-[11px] text-slate-500 flex items-center gap-1">
                       <MapPin className="w-3 h-3" />
                       <span>{b.client.neighborhood || b.client.address}</span>
                     </p>
                   </div>
 
                   <div className="text-right shrink-0">
-                    <span className="font-serif font-bold text-[#2D1F1A]">
-                      R$ {b.agreedPrice.toFixed(0)}
-                    </span>
+                    <span className="font-bold text-slate-900">R$ {b.agreedPrice.toFixed(0)}</span>
                     <Badge className="bg-emerald-100 text-emerald-800 text-[10px] block mt-1">
                       Confirmado
                     </Badge>
@@ -250,24 +247,24 @@ export default function AdminDashboardPage() {
         </Card>
 
         {/* Últimas Transações MercadoPago (Modo Teste) */}
-        <Card className="border-[#EADFD5] bg-white rounded-2xl shadow-xs">
-          <div className="p-5 border-b border-[#EADFD5] flex items-center justify-between">
+        <Card className="border-slate-200 bg-white rounded-2xl shadow-xs">
+          <div className="p-5 border-b border-slate-100 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="bg-[#009EE3] text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
                 MP
               </div>
               <div>
-                <h3 className="font-serif font-bold text-base text-[#2D1F1A]">
+                <h3 className="font-bold text-base text-slate-900">
                   Histórico de Cobrança (Modo Teste)
                 </h3>
-                <p className="text-[11px] text-[#7B6153]">PIX e Cartões simulados</p>
+                <p className="text-[11px] text-slate-500">PIX e Cartões simulados</p>
               </div>
             </div>
             <Button
               asChild
               variant="ghost"
               size="sm"
-              className="text-xs text-[#B8502E] hover:text-[#8C3A1D]"
+              className="text-xs text-teal-700 hover:text-teal-900"
             >
               <Link to="/painel/pagamentos">Ver pagamentos →</Link>
             </Button>
@@ -275,28 +272,28 @@ export default function AdminDashboardPage() {
 
           <CardContent className="p-5 space-y-3">
             {payments.length === 0 ? (
-              <p className="text-xs text-[#7B6153] py-4 text-center">
+              <p className="text-xs text-slate-500 py-4 text-center">
                 Nenhum pagamento registrado ainda.
               </p>
             ) : (
               payments.slice(0, 4).map((pay) => (
                 <div
                   key={pay.id}
-                  className="bg-[#FAF7F2] p-3 rounded-xl border border-[#EADFD5] flex items-center justify-between text-xs"
+                  className="bg-slate-50/70 p-3 rounded-xl border border-slate-100 flex items-center justify-between text-xs"
                 >
                   <div className="space-y-0.5">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-[#2D1F1A]">{pay.clientName}</span>
-                      <span className="font-mono text-[10px] text-stone-500">#{pay.id}</span>
+                      <span className="font-bold text-slate-900">{pay.clientName}</span>
+                      <span className="font-mono text-[10px] text-slate-400">#{pay.id}</span>
                     </div>
-                    <p className="text-[11px] text-[#7B6153]">
+                    <p className="text-[11px] text-slate-500">
                       Método: <strong className="uppercase">{pay.method}</strong> · Reserva #
                       {pay.bookingCode}
                     </p>
                   </div>
 
                   <div className="text-right">
-                    <span className="font-serif font-bold text-[#2D1F1A] block">
+                    <span className="font-bold text-slate-900 block">
                       R$ {pay.amount.toFixed(2)}
                     </span>
                     <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">

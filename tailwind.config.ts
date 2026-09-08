@@ -28,10 +28,28 @@ export default {
     extend: {
       fontFamily: {
         sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
-        serif: ['"Playfair Display"', '"Lora"', 'Georgia', 'serif'],
-        display: ['"Playfair Display"', 'serif'],
+        serif: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+        display: ['"Plus Jakarta Sans"', 'sans-serif'],
       },
       colors: {
+        brand: {
+          50: '#F0FDF4',
+          100: '#DCFCE7',
+          500: '#10B981',
+          600: '#059669',
+          700: '#047857',
+        },
+        teal: {
+          50: '#F0FDFA',
+          100: '#CCFBF1',
+          200: '#99F6E4',
+          500: '#14B8A6',
+          600: '#0D9488',
+          700: '#0F766E',
+          800: '#115E59',
+          900: '#134E4A',
+          950: '#042F2E',
+        },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

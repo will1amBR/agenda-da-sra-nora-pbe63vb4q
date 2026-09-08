@@ -104,32 +104,36 @@ export const SEED_SERVICES: Service[] = [
   },
 ]
 
-// Mock de agendamentos reais em Paracuru para o painel e consulta já ficarem vivos
-export const SEED_BOOKINGS: Booking[] = [
-  {
-    id: 'b-001',
-    code: 'NORA-2025-012',
-    serviceId: 'cuidado-idosos-mensal',
-    client: {
-      name: 'Dona Maria de Lourdes (filha Ana)',
-      phone: '(85) 98765-4321',
-      email: 'ana.lourdes@email.com',
-      address: 'Rua São Pedro, 142 - Centro',
-      neighborhood: 'Centro, Paracuru',
-    },
-    date: '2025-05-14', // Quarta-feira
-    time: '08:00',
-    notes: 'Acompanhamento rotineiro das quartas. Medicação de pressão às 10h e às 16h.',
-    frequency: 'weekly',
-    createdAt: '2025-05-01T09:00:00Z',
-    updatedAt: '2025-05-03T10:30:00Z',
-    status: 'confirmado',
-    originalPrice: 500,
-    agreedPrice: 500,
-    paymentId: 'pay-001',
-    paymentMethod: 'pix',
-    paidAt: '2025-05-03T10:30:00Z',
+// Compromisso Real e Permanente da Sra Nora: Cliente de Quarta-feira
+// Esta cliente é REAL e NÃO é um exemplo fictício de demonstração.
+// A agenda de quarta-feira está permanentemente travada para ela.
+export const REAL_WEDNESDAY_CLIENT: Booking = {
+  id: 'fixo-quarta-real',
+  code: 'FIXO-QUARTAS-NORA',
+  serviceId: 'cuidado-idosos-mensal',
+  client: {
+    name: 'Cliente Fixa de Quarta-feira (Paracuru)',
+    phone: '(85) 99874-5520',
+    email: 'atendimento.fixo@agendanora.com.br',
+    address: 'Centro, Paracuru - CE',
+    neighborhood: 'Centro, Paracuru',
   },
+  date: '2025-05-14', // Referência de quarta-feira recorrente
+  time: '08:00',
+  notes:
+    'Compromisso fixo e recorrente: atendimento toda quarta-feira do mês. Plano de R$ 500/mês com pagamento todo dia 03 via PIX. Agenda travada permanentemente.',
+  frequency: 'weekly',
+  createdAt: '2024-01-01T08:00:00Z',
+  updatedAt: new Date().toISOString(),
+  status: 'confirmado',
+  originalPrice: 500,
+  agreedPrice: 500,
+  paymentMethod: 'pix',
+  isRecurringFixed: true,
+}
+
+// Exemplos de demonstração neutros (apenas limpeza/avulso, sem misturar a cliente de quarta que é real)
+export const SEED_BOOKINGS: Booking[] = [
   {
     id: 'b-002',
     code: 'NORA-2025-018',
@@ -141,7 +145,7 @@ export const SEED_BOOKINGS: Booking[] = [
       address: 'Av. Beira-Mar, casa 88',
       neighborhood: 'Praia da Pedra Rachada, Paracuru',
     },
-    date: '2025-05-17',
+    date: '2025-05-16', // Sexta-feira
     time: '07:30',
     notes: 'Casa de veraneio fechada há 2 meses. Quintal grande e varanda com maresia.',
     frequency: 'once',
@@ -162,7 +166,7 @@ export const SEED_BOOKINGS: Booking[] = [
       address: 'Rua dos Coqueiros, 205',
       neighborhood: 'Ronco do Mar, Paracuru',
     },
-    date: '2025-05-19',
+    date: '2025-05-19', // Segunda-feira
     time: '08:00',
     notes: 'Casa duplex com 4 quartos e churrasqueira.',
     frequency: 'once',
@@ -185,7 +189,7 @@ export const SEED_BOOKINGS: Booking[] = [
       address: 'Rua Antônio Cordeiro, 50',
       neighborhood: 'Boca do Poço, Paracuru',
     },
-    date: '2025-05-20',
+    date: '2025-05-20', // Terça-feira
     time: '13:30',
     notes: 'Apartamento pequeno térreo, apenas manutenção e pó.',
     frequency: 'once',
@@ -195,18 +199,41 @@ export const SEED_BOOKINGS: Booking[] = [
     originalPrice: 120,
     agreedPrice: 120,
   },
+  {
+    id: 'b-005',
+    code: 'NORA-2025-022',
+    serviceId: 'limpeza-manutencao-semanal',
+    client: {
+      name: 'Mariana Duarte',
+      phone: '(85) 99711-3344',
+      email: 'mariana.duarte@email.com',
+      address: 'Rua das Flores, 72',
+      neighborhood: 'Centro, Paracuru',
+    },
+    date: '2025-05-22', // Quinta-feira
+    time: '08:00',
+    notes: 'Manutenção semanal regular de casa com 2 quartos.',
+    frequency: 'weekly',
+    createdAt: '2025-05-12T10:00:00Z',
+    updatedAt: '2025-05-12T14:30:00Z',
+    status: 'confirmado',
+    originalPrice: 140,
+    agreedPrice: 140,
+    paymentMethod: 'pix',
+    paidAt: '2025-05-12T14:30:00Z',
+  },
 ]
 
 export const SEED_PAYMENTS: PaymentTransaction[] = [
   {
-    id: 'pay-001',
-    bookingId: 'b-001',
-    bookingCode: 'NORA-2025-012',
-    clientName: 'Dona Maria de Lourdes (filha Ana)',
-    amount: 500,
+    id: 'pay-002',
+    bookingId: 'b-005',
+    bookingCode: 'NORA-2025-022',
+    clientName: 'Mariana Duarte',
+    amount: 140,
     method: 'pix',
     status: 'approved',
-    createdAt: '2025-05-03T10:30:00Z',
+    createdAt: '2025-05-12T14:30:00Z',
     testMode: true,
   },
 ]
@@ -257,10 +284,27 @@ export function getBookings(): Booking[] {
   initStorage()
   try {
     const raw = localStorage.getItem(STORAGE_KEYS.BOOKINGS)
-    return raw ? JSON.parse(raw) : SEED_BOOKINGS
+    let list: Booking[] = raw ? JSON.parse(raw) : SEED_BOOKINGS
+    // Migra: remove ocorrências antigas da senhora como demo b-001 (caso ainda no storage)
+    list = list.filter((b) => b.id !== 'b-001')
+    // Assegura que o compromisso fixo real esteja sempre presente e preservado
+    const hasFixed = list.some((b) => b.id === REAL_WEDNESDAY_CLIENT.id || b.isRecurringFixed)
+    if (!hasFixed) {
+      list = [REAL_WEDNESDAY_CLIENT, ...list]
+    }
+    return list
   } catch {
-    return SEED_BOOKINGS
+    return [REAL_WEDNESDAY_CLIENT, ...SEED_BOOKINGS]
   }
+}
+
+/** Retorna especificamente o compromisso fixo real da quarta-feira */
+export function getRecurringFixedBooking(): Booking {
+  const bookings = getBookings()
+  return (
+    bookings.find((b) => b.isRecurringFixed || b.id === REAL_WEDNESDAY_CLIENT.id) ||
+    REAL_WEDNESDAY_CLIENT
+  )
 }
 
 export function getBookingById(id: string): Booking | undefined {
@@ -432,9 +476,43 @@ export function recordPayment(
   return newTx
 }
 
+// Gestão de Lembretes do WhatsApp
+export function markReminderSent(
+  bookingId: string,
+  type: 'compromisso' | 'pagamento',
+): Booking | undefined {
+  const bookings = getBookings()
+  const idx = bookings.findIndex((b) => b.id === bookingId)
+  if (idx === -1) return undefined
+
+  const current = bookings[idx]
+  const sentList = current.remindersSent || []
+  const updatedSent = [
+    ...sentList.filter((r) => r.type !== type),
+    {
+      type,
+      sentAt: new Date().toISOString(),
+      channel: 'whatsapp' as const,
+    },
+  ]
+
+  const updated: Booking = {
+    ...current,
+    remindersSent: updatedSent,
+    updatedAt: new Date().toISOString(),
+  }
+
+  bookings[idx] = updated
+  saveBookings(bookings)
+  return updated
+}
+
 export function resetDemoData() {
   localStorage.setItem(STORAGE_KEYS.SERVICES, JSON.stringify(SEED_SERVICES))
-  localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(SEED_BOOKINGS))
+  localStorage.setItem(
+    STORAGE_KEYS.BOOKINGS,
+    JSON.stringify([REAL_WEDNESDAY_CLIENT, ...SEED_BOOKINGS]),
+  )
   localStorage.setItem(STORAGE_KEYS.PAYMENTS, JSON.stringify(SEED_PAYMENTS))
   window.dispatchEvent(new Event('nora_storage_change'))
 }

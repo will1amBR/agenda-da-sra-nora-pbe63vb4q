@@ -131,19 +131,17 @@ export default function AgendarPage() {
     return d
   }, [])
 
-  // Se o serviço for plano de quarta-feira e a data for mudada
+  // O plano mensal de quarta-feira já possui a agenda fixa travada para a cliente real em Paracuru
   const isWednesdayService = selectedService?.id === 'cuidado-idosos-mensal'
 
-  // Preenche a data se vazia ao selecionar
+  // Preenche a data padrão (2 a 3 dias à frente, exceto quarta se for cuidado ou domingo)
   useEffect(() => {
     if (!date) {
-      // Data padrão: 2 dias à frente ou próxima quarta-feira se for idosos mensal
       const target = new Date()
-      target.setDate(target.getDate() + (isWednesdayService ? 4 : 2))
-      if (isWednesdayService) {
-        while (target.getDay() !== 3) {
-          target.setDate(target.getDate() + 1)
-        }
+      target.setDate(target.getDate() + 2)
+      // Se cair em domingo (0) ou se cair em quarta (3), avança
+      while (target.getDay() === 0 || target.getDay() === 3) {
+        target.setDate(target.getDate() + 1)
       }
       const yyyy = target.getFullYear()
       const mm = String(target.getMonth() + 1).padStart(2, '0')
@@ -196,18 +194,19 @@ export default function AgendarPage() {
       const dateStr = `${yyyy}-${mm}-${dd}`
 
       const isPast = curr.getTime() < minDate.getTime()
-      const isSun = curr.getDay() === 0 // Domingo opcional/bloqueado
+      const isSun = curr.getDay() === 0 // Domingo bloqueado
       const isWed = curr.getDay() === 3
       const isSelected = date === dateStr
 
-      // Para o plano semanal de quartas da Nora, apenas quartas são ativas
-      const disabledForWednesdayPlan = isWednesdayService && !isWed
+      // As quartas-feiras estão PERMANENTEMENTE OCUPADAS / TRAVADAS pela cliente fixa real da Nora!
+      // Outros clientes não podem agendar nas quartas-feiras.
+      const isWednesdayLocked = isWed
 
       days.push({
         dateStr,
         dayNum: d,
         isCurrentMonth: true,
-        isDisabled: isPast || isSun || disabledForWednesdayPlan,
+        isDisabled: isPast || isSun || isWednesdayLocked,
         isToday:
           today.getDate() === d && today.getMonth() === month && today.getFullYear() === year,
         isSelected,
@@ -395,9 +394,9 @@ export default function AgendarPage() {
             <div className="bg-[#FAF7F2] border border-[#E8DFD5] rounded-2xl p-6 text-left space-y-3.5 text-xs text-[#372A24]">
               <div className="flex justify-between items-center pb-3 border-b border-[#E8DFD5]">
                 <span className="text-[#7B6153]">Código do Agendamento:</span>
-                <span className="font-mono font-bold text-sm text-[#B8502E]">
+                <span className="font-mono font-bold text-sm text-teal-800">
                   #{createdBooking.code}
-                </span>
+                </span>{' '}
               </div>
 
               <div className="flex justify-between">
@@ -432,7 +431,7 @@ export default function AgendarPage() {
 
               <div className="flex justify-between items-center pt-3 border-t border-[#E8DFD5]">
                 <span className="text-[#7B6153]">Valor Fixo Inicial:</span>
-                <span className="font-serif font-bold text-lg text-[#B8502E]">
+                <span className="font-bold text-lg text-teal-800">
                   R${' '}
                   {createdBooking.originalPrice.toLocaleString('pt-BR', {
                     minimumFractionDigits: 2,
@@ -463,7 +462,7 @@ export default function AgendarPage() {
             <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
               <Button
                 asChild
-                className="bg-[#B8502E] hover:bg-[#A04223] text-white rounded-full px-7 py-6 font-medium shadow-sm"
+                className="bg-teal-700 hover:bg-teal-800 text-white rounded-full px-7 py-6 font-medium shadow-sm"
               >
                 <Link to={`/minhas-reservas?code=${createdBooking.code}`}>
                   <span>Acompanhar Minha Reserva</span>
@@ -535,7 +534,7 @@ export default function AgendarPage() {
                           isCompleted
                             ? 'bg-emerald-600 text-white'
                             : isCurrent
-                              ? 'bg-[#B8502E] text-white ring-4 ring-[#B8502E]/15 shadow-sm'
+                              ? 'bg-teal-700 text-white ring-4 ring-teal-500/15 shadow-sm'
                               : 'bg-[#F2ECE5] text-[#8C7A70]'
                         }`}
                       >
@@ -550,7 +549,7 @@ export default function AgendarPage() {
                         <span
                           className={`block text-xs sm:text-sm truncate font-medium ${
                             isCurrent
-                              ? 'text-[#B8502E] font-bold'
+                              ? 'text-teal-800 font-bold'
                               : isCompleted
                                 ? 'text-[#2D1F1A]'
                                 : 'text-[#8C7A70]'
@@ -568,7 +567,7 @@ export default function AgendarPage() {
               {/* Linha de progresso sutil */}
               <div className="w-full bg-[#F0E8DF] h-1.5 rounded-full mt-3 overflow-hidden">
                 <div
-                  className="bg-[#B8502E] h-full transition-all duration-300 rounded-full"
+                  className="bg-teal-700 h-full transition-all duration-300 rounded-full"
                   style={{ width: `${((currentStep - 1) / 3) * 100}%` }}
                 />
               </div>
@@ -584,9 +583,9 @@ export default function AgendarPage() {
                 {currentStep === 1 && (
                   <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E8DFD5] shadow-xs space-y-8 animate-in fade-in duration-200">
                     <div className="space-y-1">
-                      <span className="text-xs font-bold uppercase tracking-wider text-[#B8502E]">
-                        Passo 1 de 4
-                      </span>
+                      <span className="text-xs font-bold uppercase tracking-wider text-teal-800">
+                        Passo 3 de 4 · Seus Dados
+                      </span>{' '}
                       <h2 className="font-serif text-2xl font-bold text-[#2D1F1A]">
                         O que você precisa que seja feito?
                       </h2>
@@ -607,7 +606,7 @@ export default function AgendarPage() {
                             onClick={() => setSelectedServiceId(srv.id)}
                             className={`relative rounded-2xl p-5 border text-left cursor-pointer transition-all ${
                               isSelected
-                                ? 'border-[#B8502E] bg-[#FDF9F6] shadow-sm ring-2 ring-[#B8502E]/20'
+                                ? 'border-teal-600 bg-teal-50/20 shadow-sm ring-2 ring-teal-600/20'
                                 : 'border-[#E8DFD5] bg-white hover:border-[#CDBAB0] hover:bg-[#FAF7F2]/40'
                             }`}
                           >
@@ -616,7 +615,7 @@ export default function AgendarPage() {
                               <span
                                 className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${
                                   isSelected
-                                    ? 'bg-[#B8502E] text-white'
+                                    ? 'bg-teal-700 text-white'
                                     : 'bg-[#F2ECE5] text-[#8C7A70]'
                                 }`}
                               >
@@ -630,7 +629,7 @@ export default function AgendarPage() {
                               <div
                                 className={`w-5 h-5 rounded-full flex items-center justify-center border transition-all ${
                                   isSelected
-                                    ? 'bg-[#B8502E] border-[#B8502E] text-white'
+                                    ? 'bg-teal-700 border-teal-700 text-white'
                                     : 'border-stone-300 bg-white'
                                 }`}
                               >
@@ -650,7 +649,7 @@ export default function AgendarPage() {
                             <div className="pt-3 mt-3 border-t border-[#E8DFD5]/70 flex items-baseline justify-between">
                               <span className="text-[11px] text-[#8C7A70]">Valor inicial:</span>
                               <div className="text-right">
-                                <span className="font-serif font-bold text-base text-[#B8502E]">
+                                <span className="font-bold text-base text-teal-800">
                                   R$ {srv.basePrice}
                                 </span>
                                 {srv.priceType === 'monthly_fixed' && (
@@ -677,7 +676,7 @@ export default function AgendarPage() {
                             htmlFor="needs"
                             className="font-serif font-bold text-sm text-[#2D1F1A] flex items-center gap-1.5"
                           >
-                            <FileText className="w-4 h-4 text-[#B8502E]" />
+                            <FileText className="w-4 h-4 text-teal-700" />
                             <span>O que precisa ser feito? (Observações e detalhes)</span>
                           </Label>
                           <p className="text-[11px] text-[#7B6153] mt-0.5">
@@ -699,7 +698,7 @@ export default function AgendarPage() {
                         value={needsDescription}
                         onChange={(e) => setNeedsDescription(e.target.value)}
                         placeholder="Ex: Casa com 3 quartos, 2 banheiros e varanda de praia com areia. Gostaria de capricho na cozinha e azulejos..."
-                        className="bg-white border-[#E8DFD5] rounded-xl text-xs sm:text-sm focus-visible:ring-[#B8502E]"
+                        className="bg-white border-slate-200 rounded-xl text-xs sm:text-sm focus-visible:ring-teal-600"
                       />
 
                       {/* Chips de clique rápido para ajudar o cliente */}
@@ -716,7 +715,7 @@ export default function AgendarPage() {
                               key={snippet}
                               type="button"
                               onClick={() => handleAddQuickNeed(snippet)}
-                              className="text-[11px] px-2.5 py-1 rounded-full bg-white border border-[#E8DFD5] text-[#5C4537] hover:border-[#B8502E] hover:text-[#B8502E] transition-colors text-left"
+                              className="text-[11px] px-2.5 py-1 rounded-full bg-white border border-slate-200 text-slate-700 hover:border-teal-600 hover:text-teal-800 transition-colors text-left"
                             >
                               + {snippet}
                             </button>
@@ -730,7 +729,7 @@ export default function AgendarPage() {
                       <Button
                         type="button"
                         onClick={handleNextStep}
-                        className="bg-[#B8502E] hover:bg-[#A04223] text-white rounded-full px-8 py-6 text-sm font-medium shadow-sm transition-transform hover:scale-[1.01]"
+                        className="bg-teal-700 hover:bg-teal-800 text-white rounded-full px-8 py-6 text-sm font-medium shadow-sm transition-transform hover:scale-[1.01]"
                       >
                         <span>Continuar para Data e Horário</span>
                         <ArrowRight className="w-4 h-4 ml-1.5" />
@@ -745,10 +744,10 @@ export default function AgendarPage() {
                 {currentStep === 2 && (
                   <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E8DFD5] shadow-xs space-y-8 animate-in fade-in duration-200">
                     <div className="space-y-1">
-                      <span className="text-xs font-bold uppercase tracking-wider text-[#B8502E]">
+                      <span className="text-xs font-bold uppercase tracking-wider text-teal-800">
                         Passo 2 de 4
                       </span>
-                      <h2 className="font-serif text-2xl font-bold text-[#2D1F1A]">
+                      <h2 className="text-2xl font-bold text-slate-900">
                         Quando você prefere o atendimento?
                       </h2>
                       <p className="text-xs sm:text-sm text-[#7B6153]">
@@ -757,22 +756,21 @@ export default function AgendarPage() {
                       </p>
                     </div>
 
-                    {/* Dica amigável para plano mensal de quarta */}
-                    {isWednesdayService && (
-                      <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-start gap-3 text-xs text-amber-950">
-                        <Info className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-                        <div>
-                          <strong className="block text-amber-900">
-                            Plano Semanal de Cuidados (Quartas-feiras):
-                          </strong>
-                          <span>
-                            Para este serviço mensal (R$ 500/mês), a Sra Nora atende toda{' '}
-                            <strong>quarta-feira</strong>. Por isso, apenas as quartas estão
-                            disponíveis para início.
-                          </span>
-                        </div>
+                    {/* Dica amigável informando sobre as quartas-feiras travadas */}
+                    <div className="bg-amber-50 border border-amber-200/80 rounded-2xl p-4 flex items-start gap-3 text-xs text-amber-950">
+                      <Info className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+                      <div>
+                        <strong className="block text-amber-900 font-semibold">
+                          Aviso de Agenda: Quartas-feiras Ocupadas Permanentemente
+                        </strong>
+                        <span className="text-amber-900/90 leading-relaxed">
+                          As <strong>quartas-feiras</strong> da Sra Nora já possuem compromisso fixo
+                          recorrente e continuado (cuidado dedicado de idosa em Paracuru). Por isso,
+                          as quartas aparecem bloqueadas no calendário. Para novos agendamentos,
+                          escolha entre <strong>segunda, terça, quinta, sexta ou sábado</strong>.
+                        </span>
                       </div>
-                    )}
+                    </div>
 
                     {/* CALENDÁRIO VISUAL LEVE & MODERNO */}
                     <div className="bg-[#FAF7F2] rounded-2xl p-5 border border-[#E8DFD5] space-y-4">
@@ -847,19 +845,19 @@ export default function AgendarPage() {
                               onClick={() => setDate(day.dateStr)}
                               className={`h-10 sm:h-11 rounded-xl flex flex-col items-center justify-center text-xs font-medium transition-all relative ${
                                 day.isSelected
-                                  ? 'bg-[#B8502E] text-white font-bold shadow-sm scale-105 z-10'
-                                  : day.isDisabled
-                                    ? 'bg-transparent text-stone-300 cursor-not-allowed opacity-50'
-                                    : 'bg-white hover:bg-[#F2ECE5] text-[#2D1F1A] border border-[#E8DFD5]/60 hover:border-[#B8502E]/40'
+                                  ? 'bg-teal-700 text-white font-bold shadow-sm scale-105 z-10'
+                                  : day.isToday
+                                    ? 'bg-teal-50 text-teal-800 font-bold border border-teal-200'
+                                    : 'bg-white hover:bg-slate-50 text-slate-800 border border-slate-200/80 hover:border-teal-600/40'
                               }`}
                             >
                               <span>{day.dayNum}</span>
-                              {day.isToday && !day.isSelected && (
-                                <span className="w-1 h-1 rounded-full bg-[#B8502E] absolute bottom-1" />
-                              )}
-                              {isWednesdayService && day.isWednesday && !day.isSelected && (
-                                <span className="text-[8px] leading-none text-[#B8502E] font-bold">
-                                  Qua
+                              {day.isToday && (
+                                <span className="w-1 h-1 rounded-full bg-teal-600 absolute bottom-1" />
+                              )}{' '}
+                              {day.isWednesday && (
+                                <span className="text-[7.5px] leading-none text-stone-400 font-medium">
+                                  Ocupada
                                 </span>
                               )}
                             </button>
@@ -893,7 +891,7 @@ export default function AgendarPage() {
                       <div className="flex items-center justify-between">
                         <div>
                           <Label className="font-serif font-bold text-sm text-[#2D1F1A] flex items-center gap-1.5">
-                            <Clock className="w-4 h-4 text-[#B8502E]" />
+                            <Clock className="w-4 h-4 text-teal-700" />
                             <span>Horário de Início Sugerido</span>
                           </Label>
                           <p className="text-[11px] text-[#7B6153]">
@@ -923,7 +921,7 @@ export default function AgendarPage() {
                                 onClick={() => setTime(slot.id)}
                                 className={`p-3 rounded-xl border text-center transition-all ${
                                   isSlotSelected
-                                    ? 'bg-[#B8502E] text-white border-[#B8502E] shadow-sm ring-2 ring-[#B8502E]/20'
+                                    ? 'bg-teal-700 text-white border-teal-700 shadow-sm ring-2 ring-teal-600/20'
                                     : 'bg-white hover:bg-[#FAF7F2] border-[#E8DFD5] text-[#2D1F1A]'
                                 }`}
                               >
@@ -958,8 +956,8 @@ export default function AgendarPage() {
                                 onClick={() => setTime(slot.id)}
                                 className={`p-3 rounded-xl border text-center transition-all ${
                                   isSlotSelected
-                                    ? 'bg-[#B8502E] text-white border-[#B8502E] shadow-sm ring-2 ring-[#B8502E]/20'
-                                    : 'bg-white hover:bg-[#FAF7F2] border-[#E8DFD5] text-[#2D1F1A]'
+                                    ? 'bg-teal-700 text-white border-teal-700 shadow-sm ring-2 ring-teal-600/20'
+                                    : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-800'
                                 }`}
                               >
                                 <span className="font-bold text-sm block">{slot.label}</span>
@@ -982,7 +980,7 @@ export default function AgendarPage() {
                     {/* FREQUÊNCIA DO ATENDIMENTO (OPCIONAL/CHIPS) */}
                     <div className="pt-2 border-t border-[#E8DFD5] space-y-2">
                       <Label className="font-serif font-bold text-sm text-[#2D1F1A] flex items-center gap-1.5">
-                        <Repeat className="w-4 h-4 text-[#B8502E]" />
+                        <Repeat className="w-4 h-4 text-teal-700" />
                         <span>Frequência desejada:</span>
                       </Label>
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -1023,7 +1021,7 @@ export default function AgendarPage() {
                         type="button"
                         onClick={handleNextStep}
                         disabled={!canProceedStep2}
-                        className="bg-[#B8502E] hover:bg-[#A04223] text-white rounded-full px-8 py-6 text-sm font-medium shadow-sm transition-transform hover:scale-[1.01]"
+                        className="bg-teal-700 hover:bg-teal-800 text-white rounded-full px-8 py-6 text-sm font-medium shadow-sm transition-transform hover:scale-[1.01]"
                       >
                         <span>Continuar para Local e Contato</span>
                         <ArrowRight className="w-4 h-4 ml-1.5" />
@@ -1038,10 +1036,10 @@ export default function AgendarPage() {
                 {currentStep === 3 && (
                   <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E8DFD5] shadow-xs space-y-8 animate-in fade-in duration-200">
                     <div className="space-y-1">
-                      <span className="text-xs font-bold uppercase tracking-wider text-[#B8502E]">
+                      <span className="text-xs font-bold uppercase tracking-wider text-teal-800">
                         Passo 3 de 4
                       </span>
-                      <h2 className="font-serif text-2xl font-bold text-[#2D1F1A]">
+                      <h2 className="text-2xl font-bold text-slate-900">
                         Onde e com quem será o atendimento?
                       </h2>
                       <p className="text-xs sm:text-sm text-[#7B6153]">
@@ -1107,7 +1105,7 @@ export default function AgendarPage() {
                           id="neighborhood"
                           value={neighborhood}
                           onChange={(e) => setNeighborhood(e.target.value)}
-                          className="w-full border border-[#E8DFD5] rounded-xl px-3 py-2 text-sm bg-[#FAF7F2] focus:outline-none focus:ring-2 focus:ring-[#B8502E]"
+                          className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-600"
                         >
                           <option value="Centro, Paracuru">Centro</option>
                           <option value="Ronco do Mar, Paracuru">Ronco do Mar</option>
@@ -1166,7 +1164,7 @@ export default function AgendarPage() {
                         type="button"
                         onClick={handleNextStep}
                         disabled={!canProceedStep3}
-                        className="bg-[#B8502E] hover:bg-[#A04223] text-white rounded-full px-8 py-6 text-sm font-medium shadow-sm transition-transform hover:scale-[1.01]"
+                        className="bg-teal-700 hover:bg-teal-800 text-white rounded-full px-8 py-6 text-sm font-medium shadow-sm transition-transform hover:scale-[1.01]"
                       >
                         <span>Revisar Solicitação</span>
                         <ArrowRight className="w-4 h-4 ml-1.5" />
@@ -1181,9 +1179,9 @@ export default function AgendarPage() {
                 {currentStep === 4 && (
                   <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E8DFD5] shadow-xs space-y-8 animate-in fade-in duration-200">
                     <div className="space-y-1">
-                      <span className="text-xs font-bold uppercase tracking-wider text-[#B8502E]">
-                        Passo 4 de 4 · Revisão
-                      </span>
+                      <span className="text-xs font-bold uppercase tracking-wider text-teal-800">
+                        Passo 1 de 4 · Selecione o Serviço
+                      </span>{' '}
                       <h2 className="font-serif text-2xl font-bold text-[#2D1F1A]">
                         Confira os dados do seu agendamento
                       </h2>
@@ -1211,7 +1209,7 @@ export default function AgendarPage() {
                           <span className="text-[11px] text-[#7B6153] block">
                             Valor Fixo Inicial
                           </span>
-                          <span className="font-serif font-bold text-2xl text-[#B8502E]">
+                          <span className="font-bold text-2xl text-teal-800">
                             R${' '}
                             {selectedService.basePrice.toLocaleString('pt-BR', {
                               minimumFractionDigits: 2,
@@ -1280,7 +1278,7 @@ export default function AgendarPage() {
                           variant="ghost"
                           size="sm"
                           onClick={() => setCurrentStep(3)}
-                          className="text-xs text-[#B8502E] hover:underline"
+                          className="text-xs text-teal-700 hover:underline"
                         >
                           Editar dados
                         </Button>
@@ -1318,7 +1316,7 @@ export default function AgendarPage() {
                         type="button"
                         onClick={() => handleSubmitBooking()}
                         disabled={isSubmitting}
-                        className="bg-[#B8502E] hover:bg-[#A04223] text-white rounded-full px-8 py-6 text-sm font-medium shadow-md transition-transform hover:scale-[1.01]"
+                        className="bg-teal-700 hover:bg-teal-800 text-white rounded-full px-8 py-6 text-sm font-medium shadow-md transition-transform hover:scale-[1.01]"
                       >
                         {isSubmitting ? (
                           <span>Enviando solicitação...</span>
@@ -1354,7 +1352,7 @@ export default function AgendarPage() {
                         Serviço
                       </span>
                       <p className="font-semibold text-sm text-[#2D1F1A]">{selectedService.name}</p>
-                      <span className="inline-block text-[10px] text-[#B8502E] bg-[#F9EDE8] px-2 py-0.5 rounded font-medium">
+                      <span className="inline-block text-[10px] text-teal-800 bg-teal-50 px-2 py-0.5 rounded font-medium border border-teal-100">
                         {selectedService.category === 'idosos'
                           ? 'Cuidado de Idosos'
                           : selectedService.category === 'limpeza'
@@ -1407,7 +1405,7 @@ export default function AgendarPage() {
                     <div className="pt-3 border-t border-[#E8DFD5] space-y-1">
                       <div className="flex items-baseline justify-between">
                         <span className="text-xs text-[#7B6153]">Valor Fixo Inicial:</span>
-                        <span className="font-serif font-bold text-xl text-[#B8502E]">
+                        <span className="font-bold text-xl text-teal-800">
                           R${' '}
                           {selectedService.basePrice.toLocaleString('pt-BR', {
                             minimumFractionDigits: 2,
@@ -1426,7 +1424,7 @@ export default function AgendarPage() {
                       <Button
                         type="button"
                         onClick={handleNextStep}
-                        className="w-full bg-[#B8502E] hover:bg-[#A04223] text-white rounded-full py-5 text-xs font-semibold shadow-xs"
+                        className="w-full bg-teal-700 hover:bg-teal-800 text-white rounded-full py-5 text-xs font-semibold shadow-xs"
                       >
                         Continuar
                       </Button>
@@ -1435,7 +1433,7 @@ export default function AgendarPage() {
                         type="button"
                         onClick={() => handleSubmitBooking()}
                         disabled={isSubmitting}
-                        className="w-full bg-[#B8502E] hover:bg-[#A04223] text-white rounded-full py-5 text-xs font-semibold shadow-xs"
+                        className="w-full bg-teal-700 hover:bg-teal-800 text-white rounded-full py-5 text-xs font-semibold shadow-xs"
                       >
                         {isSubmitting ? 'Enviando...' : 'Finalizar Solicitação'}
                       </Button>

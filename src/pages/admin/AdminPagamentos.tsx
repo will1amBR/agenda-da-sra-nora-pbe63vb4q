@@ -47,15 +47,16 @@ export default function AdminPagamentosPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#2D1F1A]">
-              Transações &amp; MercadoPago
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">
+              Histórico &amp; MercadoPago
             </h1>
-            <Badge className="bg-amber-400 text-stone-900 font-bold text-xs uppercase tracking-wider">
-              Modo Teste Simulado
+            <Badge className="bg-[#009EE3] text-white text-[10px] uppercase font-bold">
+              Modo Teste
             </Badge>
           </div>
-          <p className="text-xs sm:text-sm text-[#7B6153]">
-            Histórico completo de pagamentos recebidos via Cartão de Crédito e PIX.
+          <p className="text-xs sm:text-sm text-slate-600 mt-1">
+            Visualização de cobranças simuladas via PIX e Cartões, chave PIX oficial e saldo de
+            demonstração.
           </p>
         </div>
       </div>
@@ -79,9 +80,9 @@ export default function AdminPagamentosPage() {
         </div>
 
         {/* Card Chave PIX Cadastrada da Sra Nora */}
-        <div className="bg-[#FAF7F2] border border-[#E8DFD5] rounded-2xl p-5 space-y-2 text-xs">
+        <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-2 text-xs">
           <div className="flex items-center justify-between">
-            <span className="font-semibold uppercase tracking-wider text-[10px] text-[#8C3A1D]">
+            <span className="font-semibold uppercase tracking-wider text-[10px] text-teal-800">
               Chave PIX da Sra Nora
             </span>
             <span className="text-[10px] bg-emerald-100 text-emerald-800 font-semibold px-2 py-0.5 rounded-full">
@@ -89,14 +90,14 @@ export default function AdminPagamentosPage() {
             </span>
           </div>
           <div>
-            <span className="text-stone-500 text-[11px] block">Telefone Celular:</span>
-            <span className="font-mono font-bold text-base text-[#2D1F1A]">
+            <span className="text-slate-500 text-[11px] block">Telefone Celular:</span>
+            <span className="font-mono font-bold text-base text-slate-900">
               {NORA_PIX_CONFIG.formattedKey}
             </span>
           </div>
-          <p className="text-[11px] text-stone-500 pt-1 border-t border-[#E8DFD5]">
+          <p className="text-[11px] text-slate-500 pt-1 border-t border-slate-200">
             Valor copiável:{' '}
-            <code className="font-mono bg-white px-1 py-0.5 rounded border border-[#E8DFD5] text-stone-700">
+            <code className="font-mono bg-white px-1 py-0.5 rounded border border-slate-200 text-slate-700">
               {NORA_PIX_CONFIG.rawKey}
             </code>
           </p>
@@ -105,52 +106,52 @@ export default function AdminPagamentosPage() {
 
       {/* CARDS DE RESUMO FINANCEIRO */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card className="border-[#EADFD5] bg-white rounded-2xl shadow-xs">
+        <Card className="border-slate-200 bg-white rounded-2xl shadow-xs">
           <CardContent className="p-5 flex items-center justify-between">
             <div className="space-y-1">
-              <span className="text-[11px] font-semibold uppercase text-stone-500 tracking-wider">
+              <span className="text-[11px] font-semibold uppercase text-slate-500 tracking-wider">
                 Total Recebido (Teste)
               </span>
-              <p className="font-serif text-3xl font-bold text-[#2D1F1A]">
+              <p className="text-3xl font-bold text-slate-900">
                 R$ {totalAll.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
               </p>
-              <p className="text-[11px] text-[#7B6153]">{payments.length} transações processadas</p>
+              <p className="text-[11px] text-slate-500">{payments.length} transações processadas</p>
             </div>
-            <div className="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-800 flex items-center justify-center">
               <CheckCircle2 className="w-6 h-6" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-[#EADFD5] bg-white rounded-2xl shadow-xs">
+        <Card className="border-slate-200 bg-white rounded-2xl shadow-xs">
           <CardContent className="p-5 flex items-center justify-between">
             <div className="space-y-1">
-              <span className="text-[11px] font-semibold uppercase text-stone-500 tracking-wider">
+              <span className="text-[11px] font-semibold uppercase text-slate-500 tracking-wider">
                 Via PIX Instantâneo
               </span>
-              <p className="font-serif text-2xl font-bold text-[#009EE3]">
+              <p className="text-2xl font-bold text-teal-700">
                 R$ {totalPix.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
               </p>
-              <p className="text-[11px] text-[#7B6153]">Sem taxa de intermediador</p>
+              <p className="text-[11px] text-slate-500">Sem taxa de intermediador</p>
             </div>
-            <div className="w-12 h-12 rounded-xl bg-sky-100 text-[#009EE3] flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center">
               <QrCode className="w-6 h-6" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-[#EADFD5] bg-white rounded-2xl shadow-xs">
+        <Card className="border-slate-200 bg-white rounded-2xl shadow-xs">
           <CardContent className="p-5 flex items-center justify-between">
             <div className="space-y-1">
-              <span className="text-[11px] font-semibold uppercase text-stone-500 tracking-wider">
+              <span className="text-[11px] font-semibold uppercase text-slate-500 tracking-wider">
                 Via Cartão de Crédito
               </span>
-              <p className="font-serif text-2xl font-bold text-purple-700">
+              <p className="text-2xl font-bold text-purple-700">
                 R$ {totalCard.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
               </p>
-              <p className="text-[11px] text-[#7B6153]">Cartões de teste oficiais MP</p>
+              <p className="text-[11px] text-slate-500">Cartões de teste oficiais MP</p>
             </div>
-            <div className="w-12 h-12 rounded-xl bg-purple-100 text-purple-800 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-purple-50 text-purple-800 flex items-center justify-center">
               <CreditCard className="w-6 h-6" />
             </div>
           </CardContent>
@@ -159,33 +160,31 @@ export default function AdminPagamentosPage() {
 
       {/* TABELA / LISTA DE TRANSAÇÕES */}
       <div className="space-y-4">
-        <h2 className="font-serif text-lg font-bold text-[#2D1F1A]">
-          Registro de Transações no Gateway
-        </h2>
+        <h2 className="text-lg font-bold text-slate-900">Registro de Transações no Gateway</h2>
 
         {payments.length === 0 ? (
-          <div className="bg-white rounded-2xl p-10 text-center border border-[#EADFD5]">
-            <p className="text-xs text-stone-500">Nenhum pagamento registrado ainda.</p>
+          <div className="bg-white rounded-2xl p-10 text-center border border-slate-200">
+            <p className="text-xs text-slate-500">Nenhum pagamento registrado ainda.</p>
           </div>
         ) : (
           <div className="space-y-3">
             {payments.map((tx) => (
-              <Card key={tx.id} className="border-[#EADFD5] bg-white rounded-2xl shadow-xs">
+              <Card key={tx.id} className="border-slate-200 bg-white rounded-2xl shadow-xs">
                 <CardContent className="p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-sm text-[#2D1F1A]">{tx.clientName}</span>
-                      <span className="font-mono text-[10px] text-stone-500">ID: #{tx.id}</span>
-                      <span className="font-mono text-[10px] text-[#B8502E]">
+                      <span className="font-bold text-sm text-slate-900">{tx.clientName}</span>
+                      <span className="font-mono text-[10px] text-slate-400">ID: #{tx.id}</span>
+                      <span className="font-mono text-[10px] text-teal-700">
                         Ref: #{tx.bookingCode}
                       </span>
                     </div>
 
-                    <p className="text-stone-500 flex items-center gap-2">
+                    <p className="text-slate-500 flex items-center gap-2">
                       <span>{new Date(tx.createdAt).toLocaleDateString('pt-BR')}</span>
                       <span>às {new Date(tx.createdAt).toLocaleTimeString('pt-BR')}</span>
                       <span>·</span>
-                      <span className="font-semibold uppercase tracking-wider text-sky-800">
+                      <span className="font-semibold uppercase tracking-wider text-teal-800">
                         {tx.method === 'pix' ? 'PIX Simulado' : 'Cartão de Crédito'}
                       </span>
                       {tx.cardLastFour && <span>(Final {tx.cardLastFour})</span>}
@@ -193,7 +192,7 @@ export default function AdminPagamentosPage() {
                   </div>
 
                   <div className="text-right flex sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto gap-2">
-                    <span className="font-serif font-bold text-base text-[#2D1F1A]">
+                    <span className="font-bold text-base text-slate-900">
                       R$ {tx.amount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                     </span>
                     <Badge

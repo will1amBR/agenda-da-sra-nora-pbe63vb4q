@@ -123,29 +123,29 @@ export default function AdminSolicitacoesPage() {
       {/* Header */}
       <div className="space-y-2">
         <div className="flex items-center gap-2">
-          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#2D1F1A]">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">
             Solicitações de Atendimento
           </h1>
           {pendingList.length > 0 && (
-            <Badge className="bg-[#B8502E] text-white text-xs">
+            <Badge className="bg-teal-700 text-white text-xs">
               {pendingList.length} aguardando sua ação
             </Badge>
           )}
         </div>
-        <p className="text-xs sm:text-sm text-[#7B6153]">
+        <p className="text-xs sm:text-sm text-slate-600">
           Aqui a Sra Nora avalia cada pedido: aprova pelo valor fixo original, propõe um novo valor
           (negociação) ou recusa caso a agenda esteja cheia.
         </p>
       </div>
 
       {/* Abas de Filtro */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-[#EADFD5] pb-3">
+      <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-3">
         <button
           onClick={() => setFilterTab('pending')}
           className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 ${
             filterTab === 'pending'
-              ? 'bg-[#B8502E] text-white shadow-xs'
-              : 'bg-white text-stone-700 hover:bg-[#FAF7F2] border border-[#EADFD5]'
+              ? 'bg-teal-700 text-white shadow-xs'
+              : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200'
           }`}
         >
           <Clock className="w-3.5 h-3.5" />
@@ -159,8 +159,8 @@ export default function AdminSolicitacoesPage() {
           onClick={() => setFilterTab('negotiating')}
           className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 ${
             filterTab === 'negotiating'
-              ? 'bg-[#B8502E] text-white shadow-xs'
-              : 'bg-white text-stone-700 hover:bg-[#FAF7F2] border border-[#EADFD5]'
+              ? 'bg-teal-700 text-white shadow-xs'
+              : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200'
           }`}
         >
           <Edit3 className="w-3.5 h-3.5" />
@@ -174,12 +174,12 @@ export default function AdminSolicitacoesPage() {
           onClick={() => setFilterTab('all')}
           className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 ${
             filterTab === 'all'
-              ? 'bg-[#B8502E] text-white shadow-xs'
-              : 'bg-white text-stone-700 hover:bg-[#FAF7F2] border border-[#EADFD5]'
+              ? 'bg-teal-700 text-white shadow-xs'
+              : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200'
           }`}
         >
           <span>Todos os Pedidos</span>
-          <span className="ml-1 px-1.5 py-0.2 rounded-full text-[10px] bg-stone-200 text-stone-800">
+          <span className="ml-1 px-1.5 py-0.2 rounded-full text-[10px] bg-slate-100 text-slate-700">
             {bookings.length}
           </span>
         </button>
@@ -188,10 +188,10 @@ export default function AdminSolicitacoesPage() {
       {/* LISTA DE SOLICITAÇÕES */}
       <div className="space-y-4">
         {displayedList.length === 0 ? (
-          <div className="bg-white rounded-2xl p-12 text-center border border-[#EADFD5] space-y-3">
-            <Inbox className="w-10 h-10 text-stone-400 mx-auto" />
-            <p className="text-sm font-semibold text-[#2D1F1A]">Nenhuma solicitação nesta aba</p>
-            <p className="text-xs text-[#7B6153]">
+          <div className="bg-white rounded-2xl p-12 text-center border border-slate-200 space-y-3">
+            <Inbox className="w-10 h-10 text-slate-400 mx-auto" />
+            <p className="text-sm font-semibold text-slate-900">Nenhuma solicitação nesta aba</p>
+            <p className="text-xs text-slate-500">
               Tudo em dia! Novos pedidos feitos no site público aparecerão aqui para sua aprovação.
             </p>
           </div>
@@ -204,9 +204,9 @@ export default function AdminSolicitacoesPage() {
             return (
               <Card
                 key={booking.id}
-                className={`border-[#EADFD5] bg-white rounded-2xl shadow-xs overflow-hidden transition-all ${
+                className={`border-slate-200 bg-white rounded-2xl shadow-xs overflow-hidden transition-all ${
                   booking.status === 'aguardando_aprovacao'
-                    ? 'border-l-4 border-l-[#B8502E]'
+                    ? 'border-l-4 border-l-amber-500'
                     : booking.status === 'negociacao_pendente'
                       ? 'border-l-4 border-l-blue-500'
                       : ''
@@ -214,12 +214,12 @@ export default function AdminSolicitacoesPage() {
               >
                 <CardContent className="p-6 space-y-5">
                   {/* Topo do Item */}
-                  <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#EADFD5] pb-4">
+                  <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
                     <div className="flex items-center gap-3">
-                      <span className="font-mono font-bold text-sm text-[#B8502E]">
+                      <span className="font-mono font-bold text-sm text-teal-800">
                         #{booking.code}
                       </span>
-                      <span className="text-xs text-stone-500">
+                      <span className="text-xs text-slate-500">
                         Recebido em {new Date(booking.createdAt).toLocaleDateString('pt-BR')} às{' '}
                         {new Date(booking.createdAt).toLocaleTimeString('pt-BR', {
                           hour: '2-digit',
@@ -263,19 +263,19 @@ export default function AdminSolicitacoesPage() {
                   </div>
 
                   {/* Detalhes do Pedido */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs text-[#372A24]">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs text-slate-700">
                     {/* Cliente */}
                     <div className="space-y-1">
-                      <span className="text-[#8C7A70] uppercase font-semibold text-[10px] tracking-wider block">
+                      <span className="text-slate-500 uppercase font-semibold text-[10px] tracking-wider block">
                         Cliente / Família
                       </span>
-                      <p className="font-bold text-sm text-[#2D1F1A]">{booking.client.name}</p>
-                      <p className="text-[#6B5345] flex items-center gap-1">
-                        <Phone className="w-3.5 h-3.5 text-stone-400" />
+                      <p className="font-bold text-sm text-slate-900">{booking.client.name}</p>
+                      <p className="text-slate-600 flex items-center gap-1">
+                        <Phone className="w-3.5 h-3.5 text-slate-400" />
                         <span>{booking.client.phone}</span>
                       </p>
-                      <p className="text-[#6B5345] flex items-start gap-1">
-                        <MapPin className="w-3.5 h-3.5 text-[#B8502E] shrink-0 mt-0.5" />
+                      <p className="text-slate-600 flex items-start gap-1">
+                        <MapPin className="w-3.5 h-3.5 text-teal-600 shrink-0 mt-0.5" />
                         <span>
                           {booking.client.address} · {booking.client.neighborhood}
                         </span>
@@ -284,14 +284,14 @@ export default function AdminSolicitacoesPage() {
 
                     {/* Serviço & Data */}
                     <div className="space-y-1">
-                      <span className="text-[#8C7A70] uppercase font-semibold text-[10px] tracking-wider block">
+                      <span className="text-slate-500 uppercase font-semibold text-[10px] tracking-wider block">
                         Serviço &amp; Data em Paracuru
                       </span>
-                      <p className="font-bold text-sm text-[#2D1F1A]">
+                      <p className="font-bold text-sm text-slate-900">
                         {service?.name || 'Serviço da Nora'}
                       </p>
-                      <p className="text-[#6B5345] flex items-center gap-1 font-medium">
-                        <Calendar className="w-3.5 h-3.5 text-[#B8502E]" />
+                      <p className="text-slate-600 flex items-center gap-1 font-medium">
+                        <Calendar className="w-3.5 h-3.5 text-teal-600" />
                         <span>
                           {new Date(booking.date + 'T12:00:00').toLocaleDateString('pt-BR', {
                             weekday: 'long',
@@ -302,7 +302,7 @@ export default function AdminSolicitacoesPage() {
                         </span>
                       </p>
                       {booking.frequency && booking.frequency !== 'once' && (
-                        <span className="inline-block text-[10px] font-semibold text-[#8C3A1D] bg-[#F9EDE8] px-2 py-0.5 rounded">
+                        <span className="inline-block text-[10px] font-semibold text-teal-900 bg-teal-50 px-2 py-0.5 rounded border border-teal-200">
                           Frequência: {booking.frequency}
                         </span>
                       )}
@@ -310,10 +310,10 @@ export default function AdminSolicitacoesPage() {
 
                     {/* Preços */}
                     <div className="space-y-1 md:text-right">
-                      <span className="text-[#8C7A70] uppercase font-semibold text-[10px] tracking-wider block">
+                      <span className="text-slate-500 uppercase font-semibold text-[10px] tracking-wider block">
                         Valor
                       </span>
-                      <p className="font-serif font-bold text-xl text-[#B8502E]">
+                      <p className="font-bold text-xl text-teal-800">
                         R${' '}
                         {booking.agreedPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                       </p>
@@ -322,7 +322,7 @@ export default function AdminSolicitacoesPage() {
                           Proposta enviada: R$ {booking.proposedPrice}
                         </p>
                       )}
-                      <p className="text-[11px] text-[#7B6153]">
+                      <p className="text-[11px] text-slate-500">
                         Valor de tabela solicitado: R$ {booking.originalPrice}
                       </p>
                     </div>
@@ -332,7 +332,7 @@ export default function AdminSolicitacoesPage() {
                   {booking.notes && (
                     <div className="bg-[#FAF7F2] p-3.5 rounded-xl border border-[#EADFD5] text-xs text-[#5C4537] space-y-1">
                       <div className="flex items-center gap-1.5 font-bold text-[#8C3A1D] text-[11px] uppercase tracking-wider">
-                        <Sparkles className="w-3.5 h-3.5 text-[#B8502E]" />
+                        <Sparkles className="w-3.5 h-3.5 text-teal-700" />
                         <span>O que o cliente precisa que seja feito / Observações:</span>
                       </div>
                       <p className="text-[#372A24] font-medium leading-relaxed whitespace-pre-line bg-white p-2.5 rounded-lg border border-[#EADFD5]/80">

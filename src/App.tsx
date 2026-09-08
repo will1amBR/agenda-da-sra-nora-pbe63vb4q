@@ -12,6 +12,7 @@ import AdminLayout from './components/AdminLayout'
 import AdminDashboardPage from './pages/admin/AdminDashboard'
 import AdminSolicitacoesPage from './pages/admin/AdminSolicitacoes'
 import AdminAgendaPage from './pages/admin/AdminAgenda'
+import AdminLembretesPage from './pages/admin/AdminLembretes'
 import AdminPagamentosPage from './pages/admin/AdminPagamentos'
 
 const App = () => (
@@ -32,6 +33,7 @@ const App = () => (
           <Route index element={<AdminDashboardPage />} />
           <Route path="solicitacoes" element={<AdminSolicitacoesPage />} />
           <Route path="agenda" element={<AdminAgendaPage />} />
+          <Route path="lembretes" element={<AdminLembretesPage />} />
           <Route path="pagamentos" element={<AdminPagamentosPage />} />
         </Route>
 

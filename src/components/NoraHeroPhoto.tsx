@@ -45,7 +45,7 @@ export default function NoraHeroPhoto({ className = '' }: NoraHeroPhotoProps) {
         className="w-full h-full object-cover"
         loading="eager"
       />
-      <div className="absolute bottom-3 left-3 right-3 bg-[#2D1F1A]/85 backdrop-blur-sm text-white px-3 py-2 rounded-xl text-xs flex items-center justify-between pointer-events-none">
+      <div className="absolute bottom-3 left-3 right-3 bg-slate-900/85 backdrop-blur-sm text-white px-3 py-2 rounded-xl text-xs flex items-center justify-between pointer-events-none">
         <span className="font-medium">{NORA_HERO_IMAGE.badgeLabel}</span>
         <span className="flex items-center gap-1 text-amber-300">
           <MapPin className="w-3 h-3" /> {NORA_HERO_IMAGE.locationBadge}

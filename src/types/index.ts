@@ -58,6 +58,33 @@ export interface Booking {
   paymentId?: string
   paymentMethod?: 'pix' | 'credit_card'
   paidAt?: string
+
+  // Histórico de lembretes enviados via WhatsApp
+  remindersSent?: {
+    type: 'compromisso' | 'pagamento'
+    sentAt: string
+    channel?: 'whatsapp'
+  }[]
+  isRecurringFixed?: boolean // Indica compromisso fixo permanente (ex: quarta-feira real da Nora)
+}
+
+export interface ReminderItem {
+  id: string
+  bookingId: string
+  bookingCode: string
+  clientName: string
+  clientPhone: string
+  serviceName: string
+  type: 'compromisso' | 'pagamento'
+  targetDate: string // Data do atendimento ou do vencimento
+  time?: string
+  address?: string
+  amount: number
+  alreadySent: boolean
+  lastSentAt?: string
+  suggestedMessage: string
+  whatsappUrl: string
+  urgency: 'hoje' | 'amanha' | 'proximos' | 'vencendo' | 'atrasado'
 }
 
 export interface PaymentTransaction {

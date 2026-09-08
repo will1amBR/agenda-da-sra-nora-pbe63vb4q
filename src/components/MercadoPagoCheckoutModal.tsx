@@ -225,9 +225,7 @@ export default function MercadoPagoCheckoutModal({
               <CheckCircle2 className="w-10 h-10" />
             </div>
             <div>
-              <h3 className="font-serif text-2xl font-bold text-[#2D1F1A]">
-                Pagamento Aprovado com Sucesso!
-              </h3>
+              <h3 className="text-2xl font-bold text-slate-900">Pagamento Aprovado com Sucesso!</h3>
               <p className="text-sm text-[#7B6153] mt-1 max-w-md mx-auto">
                 Seu agendamento <strong>#{booking.code}</strong> foi registrado como{' '}
                 <span className="text-emerald-700 font-semibold">Confirmado</span> na agenda da Sra
@@ -258,10 +256,16 @@ export default function MercadoPagoCheckoutModal({
 
             {onClose && (
               <Button
-                onClick={onClose}
-                className="bg-[#B8502E] hover:bg-[#A04223] text-white rounded-full px-8 mt-2"
+                onClick={() => {
+                  if (paymentResult) {
+                    onSuccess(paymentResult)
+                  } else {
+                    onClose()
+                  }
+                }}
+                className="bg-teal-700 hover:bg-teal-800 text-white rounded-full px-8 mt-2"
               >
-                Concluir e Ver Minha Reserva
+                Concluir e Voltar
               </Button>
             )}
           </div>
@@ -350,7 +354,7 @@ export default function MercadoPagoCheckoutModal({
                     <span className="text-xs text-stone-500 block text-[11px]">
                       Chave para transferência:
                     </span>
-                    <span className="font-mono font-bold text-sm text-[#2D1F1A]">
+                    <span className="font-mono font-bold text-sm text-slate-900">
                       {pixData.pixKeyFormatted}
                     </span>
                   </div>
@@ -359,7 +363,7 @@ export default function MercadoPagoCheckoutModal({
                     size="sm"
                     variant="outline"
                     onClick={handleCopyPixKey}
-                    className="border-[#B8502E]/30 hover:bg-[#F9EDE8] text-[#B8502E] font-medium text-xs flex items-center gap-1.5 shrink-0"
+                    className="border-teal-300 hover:bg-teal-50 text-teal-800 font-medium text-xs flex items-center gap-1.5 shrink-0"
                   >
                     <Copy className="w-3.5 h-3.5" />
                     {copiedKey ? 'Chave Copiada!' : 'Copiar Chave'}
