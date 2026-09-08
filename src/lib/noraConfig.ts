@@ -50,21 +50,23 @@ export const NORA_PIX_CONFIG = {
  *     (ex.: `/nora-perfil.jpg` ou URL externa se estiver hospedada).
  *  3. Caso queira voltar à imagem anterior, `fallbackPhoto` é mantida salva.
  */
+// Importação direta do asset da nova foto da Sra Nora (retrato profissional)
+import noraRealPhoto from '@/assets/1788844625581-26f3c.jpg'
+
 export const NORA_HERO_IMAGE = {
   /**
-   * 👉 ALTERE AQUI para trocar a foto principal da Nora no site.
-   * Exemplo: '/nora-foto-oficial.jpg' ou 'https://...'
-   * Atualmente apontando para o fallback oficial enquanto aguarda nova foto.
+   * 👉 Foto oficial e real da Sra Nora (cabelo preto longo e blazer preto).
+   * Importada do asset local salvo em src/assets/.
    */
-  currentPhoto: 'https://img.usecurling.com/ppl/large?gender=female&seed=48',
+  currentPhoto: noraRealPhoto,
 
-  /** Foto padrão / fallback original de segurança */
+  /** Foto padrão / fallback de segurança */
   fallbackPhoto: 'https://img.usecurling.com/ppl/large?gender=female&seed=48',
 
   /** Texto alternativo descritivo da imagem para acessibilidade */
-  altText: 'Sra Nora - Cuidadora de Idosos e Diarista em Paracuru',
+  altText: 'Sra Nora - Cuidadora de Idosos e Diarista em Paracuru (CE)',
 
   /** Legenda do card */
-  badgeLabel: 'Sra Nora em Paracuru / CE',
-  locationBadge: 'Ceará',
+  badgeLabel: 'Sra Nora · Paracuru / CE',
+  locationBadge: 'Paracuru - CE',
 }
