@@ -29,7 +29,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
-import { getServices, createBooking } from '@/lib/data'
+import { getServices, createBooking, calculateServicePrice } from '@/lib/data'
 import { Service, Booking } from '@/types'
 import { useToast } from '@/hooks/use-toast'
 
@@ -80,9 +80,15 @@ export default function AgendarPage() {
   const [currentStep, setCurrentStep] = useState<number>(1)
 
   // Estado do agendamento
-  const [selectedServiceId, setSelectedServiceId] = useState<string>(
-    preselectedServiceId || services[0]?.id || '',
-  )
+  const defaultServiceId = useMemo(() => {
+    if (preselectedServiceId && services.some((s) => s.id === preselectedServiceId)) {
+      return preselectedServiceId
+    }
+    const nonFixed = services.find((s) => s.id !== 'cuidado-idosos-mensal')
+    return nonFixed ? nonFixed.id : services[0]?.id || ''
+  }, [preselectedServiceId, services])
+
+  const [selectedServiceId, setSelectedServiceId] = useState<string>(defaultServiceId)
   const [date, setDate] = useState<string>('')
   const [time, setTime] = useState<string>('08:00')
   const [frequency, setFrequency] = useState<'once' | 'weekly' | 'biweekly' | 'monthly'>('once')
@@ -90,13 +96,21 @@ export default function AgendarPage() {
   // Campo "o que precisa fazer" / detalhes das necessidades
   const [needsDescription, setNeedsDescription] = useState<string>('')
 
-  // Dados do cliente e endereço
+  // Dados do cliente e endereço completo
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
-  const [address, setAddress] = useState('')
-  const [neighborhood, setNeighborhood] = useState('Centro, Paracuru')
+  const [cep, setCep] = useState('')
+  const [street, setStreet] = useState('')
+  const [number, setNumber] = useState('')
+  const [complement, setComplement] = useState('') // Extensão/complemento ex: Apto 18, Casa A, Bloco B
+  const [neighborhood, setNeighborhood] = useState('Centro')
+  const [city, setCity] = useState('Paracuru')
+  const [stateUf, setStateUf] = useState('CE')
   const [referencePoint, setReferencePoint] = useState('')
+
+  // Nível de sujidade/complexidade da limpeza (influencia preço de limpeza simples/elaborada)
+  const [dirtinessLevel, setDirtinessLevel] = useState<'normal' | 'media' | 'pesada'>('normal')
 
   // Estado de confirmação / sucesso
   const [createdBooking, setCreatedBooking] = useState<Booking | null>(null)
@@ -122,6 +136,65 @@ export default function AgendarPage() {
     () => services.find((s) => s.id === selectedServiceId) || services[0],
     [services, selectedServiceId],
   )
+
+  // Máscara amigável de CEP (00000-000)
+  const handleCepChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value.replace(/\D/g, '').slice(0, 8)
+    if (raw.length > 5) {
+      setCep(`${raw.slice(0, 5)}-${raw.slice(5)}`)
+    } else {
+      setCep(raw)
+    }
+  }
+
+  // Máscara amigável de WhatsApp/Telefone
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value.replace(/\D/g, '').slice(0, 11)
+    if (raw.length <= 2) {
+      setPhone(raw ? `(${raw}` : '')
+    } else if (raw.length <= 6) {
+      setPhone(`(${raw.slice(0, 2)}) ${raw.slice(2)}`)
+    } else if (raw.length <= 10) {
+      setPhone(`(${raw.slice(0, 2)}) ${raw.slice(2, 6)}-${raw.slice(6)}`)
+    } else {
+      setPhone(`(${raw.slice(0, 2)}) ${raw.slice(2, 7)}-${raw.slice(7)}`)
+    }
+  }
+
+  // Endereço completo formatado
+  const computedFullAddress = useMemo(() => {
+    const streetPart = [street.trim(), number.trim() ? `nº ${number.trim()}` : '']
+      .filter(Boolean)
+      .join(', ')
+    const extPart = complement.trim() ? `(${complement.trim()})` : ''
+    const neighPart = neighborhood.trim() ? `- ${neighborhood.trim()}` : ''
+    const cityPart = city.trim()
+      ? `${city.trim()}${stateUf.trim() ? `/${stateUf.trim()}` : ''}`
+      : ''
+    const cepPart = cep.trim() ? `CEP: ${cep.trim()}` : ''
+
+    return [streetPart, extPart, neighPart, cityPart, cepPart].filter(Boolean).join(' ').trim()
+  }, [street, number, complement, neighborhood, city, stateUf, cep])
+
+  // Endereço curto para prévias
+  const displayAddressShort = useMemo(() => {
+    if (!street.trim()) return ''
+    const base = `${street.trim()}${number.trim() ? `, ${number.trim()}` : ''}`
+    const ext = complement.trim() ? ` - ${complement.trim()}` : ''
+    return `${base}${ext}`
+  }, [street, number, complement])
+
+  // Cálculo correto do preço centralizado conforme o serviço selecionado, frequência e nível de sujidade
+  const priceCalculation = useMemo(() => {
+    if (!selectedService) {
+      return { price: 120, label: 'Valor Inicial', isMonthly: false, explanation: '' }
+    }
+    return calculateServicePrice({
+      serviceId: selectedService.id,
+      frequency,
+      dirtinessLevel,
+    })
+  }, [selectedService, frequency, dirtinessLevel])
 
   // Data mínima: amanhã
   const minDate = useMemo(() => {
@@ -230,7 +303,17 @@ export default function AgendarPage() {
   // Validação por passo
   const canProceedStep1 = Boolean(selectedServiceId)
   const canProceedStep2 = Boolean(date && time)
-  const canProceedStep3 = Boolean(name.trim() && phone.trim() && address.trim())
+  // Passo 3 exige nome, whatsapp, CEP válido, rua/avenida, número e bairro
+  const rawCepDigits = cep.replace(/\D/g, '')
+  const isCepValid = rawCepDigits.length === 8
+  const canProceedStep3 = Boolean(
+    name.trim() &&
+    phone.trim() &&
+    isCepValid &&
+    street.trim() &&
+    number.trim() &&
+    neighborhood.trim(),
+  )
 
   const handleNextStep = () => {
     if (currentStep === 1) {
@@ -259,8 +342,9 @@ export default function AgendarPage() {
       if (!canProceedStep3) {
         toast({
           variant: 'destructive',
-          title: 'Preencha seus dados',
-          description: 'Nome, WhatsApp e endereço em Paracuru são necessários para a Nora avaliar.',
+          title: 'Endereço incompleto',
+          description:
+            'Por favor, preencha nome, WhatsApp, CEP (8 dígitos), Rua/Avenida, Número e Bairro.',
         })
         return
       }
@@ -298,11 +382,19 @@ export default function AgendarPage() {
       return
     }
 
-    if (!name || !phone || !address) {
+    if (
+      !name.trim() ||
+      !phone.trim() ||
+      rawCepDigits.length !== 8 ||
+      !street.trim() ||
+      !number.trim() ||
+      !neighborhood.trim()
+    ) {
       toast({
         variant: 'destructive',
         title: 'Dados incompletos',
-        description: 'Por favor, preencha nome, WhatsApp e endereço em Paracuru.',
+        description:
+          'Por favor, preencha nome, WhatsApp, CEP completo (8 dígitos), Rua/Avenida, Número e Bairro.',
       })
       setCurrentStep(3)
       return
@@ -310,19 +402,28 @@ export default function AgendarPage() {
 
     setIsSubmitting(true)
 
-    // Agrupa observações completas (o que precisa fazer + ponto de referência se houver)
+    // Detalhes extras de sujidade inseridos nas observações se for limpeza
+    const dirtinessNote =
+      selectedService.category === 'limpeza' && dirtinessLevel !== 'normal'
+        ? `Nível de sujidade informado: ${dirtinessLevel === 'pesada' ? 'Pesada (pós-obra / praia / fechada)' : 'Média (manutenção mais profunda)'}`
+        : ''
+
+    // Agrupa observações completas
     const combinedNotes = [
       needsDescription.trim() ? `O que precisa fazer: ${needsDescription.trim()}` : '',
+      dirtinessNote,
       referencePoint.trim() ? `Ponto de referência: ${referencePoint.trim()}` : '',
     ]
       .filter(Boolean)
       .join('\n')
 
+    // Endereço completo com rua, número, extensão/complemento, bairro, cidade, CEP e referência
     const fullAddress = referencePoint.trim()
-      ? `${address.trim()} (Ref: ${referencePoint.trim()})`
-      : address.trim()
+      ? `${computedFullAddress} (Ref: ${referencePoint.trim()})`
+      : computedFullAddress
 
-    const fixedPrice = selectedService.basePrice
+    // Preço calculado corretamente conforme serviço, frequência e complexidade (não R$ 500 genérico)
+    const finalCalculatedPrice = priceCalculation.price
 
     const newBooking = createBooking({
       serviceId: selectedService.id,
@@ -331,13 +432,13 @@ export default function AgendarPage() {
         phone: phone.trim(),
         email: email.trim() || `${name.trim().toLowerCase().replace(/\s+/g, '')}@cliente.com`,
         address: fullAddress,
-        neighborhood,
+        neighborhood: `${neighborhood.trim()}, ${city.trim()}`,
       },
       date,
       time,
       notes: combinedNotes || undefined,
       frequency,
-      fixedPrice,
+      fixedPrice: finalCalculatedPrice,
     })
 
     setIsSubmitting(false)
@@ -430,7 +531,11 @@ export default function AgendarPage() {
               )}
 
               <div className="flex justify-between items-center pt-3 border-t border-slate-200">
-                <span className="text-slate-500">Valor Fixo Inicial:</span>
+                <span className="text-slate-500">
+                  {createdBooking.frequency === 'monthly'
+                    ? 'Valor do Plano Mensal (venc. dia 03):'
+                    : 'Valor da Diária / Atendimento:'}
+                </span>
                 <span className="font-bold text-lg text-teal-800">
                   R${' '}
                   {createdBooking.originalPrice.toLocaleString('pt-BR', {
@@ -667,6 +772,83 @@ export default function AgendarPage() {
                         )
                       })}
                     </div>
+
+                    {/* SELEÇÃO DO NÍVEL DE SUJIDADE / COMPLEXIDADE (apenas para serviços de limpeza) */}
+                    {selectedService?.category === 'limpeza' && (
+                      <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <Label className="font-bold text-sm text-slate-900 flex items-center gap-1.5">
+                              <Sparkles className="w-4 h-4 text-teal-700" />
+                              <span>Nível de Sujidade ou Tamanho do Imóvel</span>
+                            </Label>
+                            <p className="text-[11px] text-slate-600 mt-0.5">
+                              {selectedService.id === 'limpeza-casa-simples'
+                                ? 'Limpeza simples varia entre R$ 100 e R$ 150 conforme a quantidade e sujidade.'
+                                : 'Faxina pesada / elaborada varia entre R$ 200 e R$ 300 conforme o tamanho e esforço.'}
+                            </p>
+                          </div>
+                          <Badge
+                            variant="outline"
+                            className="text-[10px] bg-white border-teal-200 text-teal-800"
+                          >
+                            Ajusta o valor
+                          </Badge>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                          {[
+                            {
+                              id: 'normal',
+                              label: 'Normal / Leve',
+                              desc:
+                                selectedService.id === 'limpeza-casa-simples'
+                                  ? 'Manutenção padrão (R$ 100–120)'
+                                  : 'Casa em ordem (R$ 200–220)',
+                            },
+                            {
+                              id: 'media',
+                              label: 'Média / Moderada',
+                              desc:
+                                selectedService.id === 'limpeza-casa-simples'
+                                  ? 'Poeira moderada, cozinha (R$ 130)'
+                                  : 'Casa de praia / médio porte (R$ 250)',
+                            },
+                            {
+                              id: 'pesada',
+                              label: 'Pesada / Fechada',
+                              desc:
+                                selectedService.id === 'limpeza-casa-simples'
+                                  ? 'Mais cômodos / areia (R$ 150)'
+                                  : 'Maresia / quintal / pós-obra (R$ 300)',
+                            },
+                          ].map((opt) => {
+                            const isChosen = dirtinessLevel === opt.id
+                            return (
+                              <button
+                                key={opt.id}
+                                type="button"
+                                onClick={() => setDirtinessLevel(opt.id as any)}
+                                className={`p-3 rounded-xl border text-left transition-all ${
+                                  isChosen
+                                    ? 'bg-teal-700 text-white border-teal-700 shadow-sm ring-2 ring-teal-600/20'
+                                    : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-800'
+                                }`}
+                              >
+                                <span className="font-bold text-xs block">{opt.label}</span>
+                                <span
+                                  className={`text-[10px] block mt-0.5 ${
+                                    isChosen ? 'text-white/80' : 'text-slate-500'
+                                  }`}
+                                >
+                                  {opt.desc}
+                                </span>
+                              </button>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    )}
 
                     {/* NOVO CAMPO: O QUE PRECISA FAZER (TEXTAREA + SUGESTÕES RÁPIDAS) */}
                     <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-3.5">
@@ -1072,14 +1254,14 @@ export default function AgendarPage() {
                           id="phone"
                           placeholder="Ex: (85) 99123-4567"
                           value={phone}
-                          onChange={(e) => setPhone(e.target.value)}
+                          onChange={handlePhoneChange}
                           className="bg-slate-50 border-slate-200 rounded-xl text-sm"
                           required
                         />
                       </div>
 
                       {/* E-mail opcional */}
-                      <div className="space-y-1.5">
+                      <div className="space-y-1.5 sm:col-span-2">
                         <Label htmlFor="email" className="text-xs font-semibold text-slate-700">
                           E-mail (opcional)
                         </Label>
@@ -1092,61 +1274,173 @@ export default function AgendarPage() {
                           className="bg-slate-50 border-slate-200 rounded-xl text-sm"
                         />
                       </div>
+                    </div>
 
-                      {/* Bairro em Paracuru */}
-                      <div className="space-y-1.5">
-                        <Label
-                          htmlFor="neighborhood"
-                          className="text-xs font-semibold text-slate-700"
+                    {/* SEÇÃO DE ENDEREÇO DETALHADO COM CAMPOS SEPARADOS E ROTULADOS */}
+                    <div className="pt-4 border-t border-slate-200 space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <Label className="font-bold text-sm text-slate-900 flex items-center gap-1.5">
+                            <MapPin className="w-4 h-4 text-teal-700" />
+                            <span>Endereço Completo do Cliente</span>
+                          </Label>
+                          <p className="text-[11px] text-slate-600 mt-0.5">
+                            Informe todos os dados com precisão para a Nora localizar sem
+                            dificuldades.
+                          </p>
+                        </div>
+                        <Badge
+                          variant="outline"
+                          className="text-[10px] bg-white border-teal-200 text-teal-800"
                         >
-                          Bairro / Região em Paracuru *
-                        </Label>
-                        <select
-                          id="neighborhood"
-                          value={neighborhood}
-                          onChange={(e) => setNeighborhood(e.target.value)}
-                          className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-600"
-                        >
-                          <option value="Centro, Paracuru">Centro</option>
-                          <option value="Ronco do Mar, Paracuru">Ronco do Mar</option>
-                          <option value="Boca do Poço, Paracuru">Boca do Poço</option>
-                          <option value="Praia da Pedra Rachada, Paracuru">
-                            Praia da Pedra Rachada
-                          </option>
-                          <option value="Munguba, Paracuru">Munguba</option>
-                          <option value="Praia do Meio, Paracuru">Praia do Meio</option>
-                          <option value="Outro bairro em Paracuru">Outro bairro em Paracuru</option>
-                        </select>
+                          Obrigatório
+                        </Badge>
                       </div>
-                    </div>
 
-                    {/* Rua e número */}
-                    <div className="space-y-1.5">
-                      <Label htmlFor="address" className="text-xs font-semibold text-slate-700">
-                        Rua e Número da Residência *
-                      </Label>
-                      <Input
-                        id="address"
-                        placeholder="Ex: Rua São Pedro, nº 184"
-                        value={address}
-                        onChange={(e) => setAddress(e.target.value)}
-                        className="bg-slate-50 border-slate-200 rounded-xl text-sm"
-                        required
-                      />
-                    </div>
+                      {/* Linha 1: CEP + Cidade + UF */}
+                      <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
+                        <div className="sm:col-span-4 space-y-1.5">
+                          <Label htmlFor="cep" className="text-xs font-semibold text-slate-700">
+                            CEP * (00000-000)
+                          </Label>
+                          <Input
+                            id="cep"
+                            placeholder="62600-000"
+                            maxLength={9}
+                            value={cep}
+                            onChange={handleCepChange}
+                            className="bg-slate-50 border-slate-200 rounded-xl text-sm font-mono"
+                            required
+                          />
+                          <p className="text-[10px] text-slate-500">Paracuru: 62600-000</p>
+                        </div>
 
-                    {/* Ponto de Referência */}
-                    <div className="space-y-1.5">
-                      <Label htmlFor="ref" className="text-xs font-semibold text-slate-700">
-                        Ponto de Referência em Paracuru (opcional)
-                      </Label>
-                      <Input
-                        id="ref"
-                        placeholder="Ex: Próximo à praça da Matriz / portão de madeira verde"
-                        value={referencePoint}
-                        onChange={(e) => setReferencePoint(e.target.value)}
-                        className="bg-slate-50 border-slate-200 rounded-xl text-sm"
-                      />
+                        <div className="sm:col-span-5 space-y-1.5">
+                          <Label htmlFor="city" className="text-xs font-semibold text-slate-700">
+                            Cidade *
+                          </Label>
+                          <Input
+                            id="city"
+                            value={city}
+                            onChange={(e) => setCity(e.target.value)}
+                            placeholder="Paracuru"
+                            className="bg-slate-50 border-slate-200 rounded-xl text-sm"
+                            required
+                          />
+                        </div>
+
+                        <div className="sm:col-span-3 space-y-1.5">
+                          <Label htmlFor="stateUf" className="text-xs font-semibold text-slate-700">
+                            UF *
+                          </Label>
+                          <Input
+                            id="stateUf"
+                            value={stateUf}
+                            maxLength={2}
+                            onChange={(e) => setStateUf(e.target.value.toUpperCase())}
+                            placeholder="CE"
+                            className="bg-slate-50 border-slate-200 rounded-xl text-sm uppercase text-center font-bold"
+                            required
+                          />
+                        </div>
+                      </div>
+
+                      {/* Linha 2: Rua / Avenida + Número */}
+                      <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
+                        <div className="sm:col-span-8 space-y-1.5">
+                          <Label htmlFor="street" className="text-xs font-semibold text-slate-700">
+                            Rua ou Avenida *
+                          </Label>
+                          <Input
+                            id="street"
+                            placeholder="Ex: Rua São Pedro, Av. Beira Mar..."
+                            value={street}
+                            onChange={(e) => setStreet(e.target.value)}
+                            className="bg-slate-50 border-slate-200 rounded-xl text-sm"
+                            required
+                          />
+                        </div>
+
+                        <div className="sm:col-span-4 space-y-1.5">
+                          <Label htmlFor="number" className="text-xs font-semibold text-slate-700">
+                            Número *
+                          </Label>
+                          <Input
+                            id="number"
+                            placeholder="Ex: 184 ou S/N"
+                            value={number}
+                            onChange={(e) => setNumber(e.target.value)}
+                            className="bg-slate-50 border-slate-200 rounded-xl text-sm"
+                            required
+                          />
+                        </div>
+                      </div>
+
+                      {/* Linha 3: Complemento / Extensão + Bairro */}
+                      <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
+                        <div className="sm:col-span-6 space-y-1.5">
+                          <Label
+                            htmlFor="complement"
+                            className="text-xs font-semibold text-slate-700"
+                          >
+                            Complemento / Extensão (opcional)
+                          </Label>
+                          <Input
+                            id="complement"
+                            placeholder="Apto 18, Casa A, Bloco B"
+                            value={complement}
+                            onChange={(e) => setComplement(e.target.value)}
+                            className="bg-slate-50 border-slate-200 rounded-xl text-sm"
+                          />
+                        </div>
+
+                        <div className="sm:col-span-6 space-y-1.5">
+                          <Label
+                            htmlFor="neighborhood"
+                            className="text-xs font-semibold text-slate-700"
+                          >
+                            Bairro *
+                          </Label>
+                          <Input
+                            id="neighborhood"
+                            placeholder="Ex: Centro, Ronco do Mar, Boca do Poço..."
+                            value={neighborhood}
+                            onChange={(e) => setNeighborhood(e.target.value)}
+                            className="bg-slate-50 border-slate-200 rounded-xl text-sm"
+                            required
+                          />
+                        </div>
+                      </div>
+
+                      {/* Linha 4: Ponto de Referência */}
+                      <div className="space-y-1.5">
+                        <Label htmlFor="ref" className="text-xs font-semibold text-slate-700">
+                          Ponto de Referência em Paracuru (opcional)
+                        </Label>
+                        <Input
+                          id="ref"
+                          placeholder="Ex: Próximo à praça da Matriz / em frente à padaria / portão verde"
+                          value={referencePoint}
+                          onChange={(e) => setReferencePoint(e.target.value)}
+                          className="bg-slate-50 border-slate-200 rounded-xl text-sm"
+                        />
+                      </div>
+
+                      {/* Pré-visualização do endereço montado */}
+                      {street && number && (
+                        <div className="p-3 bg-teal-50/60 rounded-xl border border-teal-100 text-xs text-teal-900 flex items-start gap-2">
+                          <MapPin className="w-4 h-4 text-teal-700 shrink-0 mt-0.5" />
+                          <div className="space-y-0.5">
+                            <span className="font-semibold block text-[11px] uppercase tracking-wider text-teal-800">
+                              Endereço como aparecerá para a Nora:
+                            </span>
+                            <span className="text-slate-800 font-medium">
+                              {computedFullAddress}
+                              {referencePoint && ` · Ref: ${referencePoint.trim()}`}
+                            </span>
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     {/* Botões de navegação */}
@@ -1192,7 +1486,7 @@ export default function AgendarPage() {
 
                     {/* Resumo detalhado em blocos limpos */}
                     <div className="space-y-4">
-                      {/* Bloco Serviço & Preço */}
+                      {/* Bloco Serviço & Preço Recalculado */}
                       <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                         <div className="space-y-1">
                           <span className="text-[10px] uppercase font-bold text-teal-800 tracking-wider block">
@@ -1202,20 +1496,20 @@ export default function AgendarPage() {
                             {selectedService.name}
                           </h3>
                           <p className="text-xs text-slate-600 max-w-md">
-                            {selectedService.description}
+                            {priceCalculation.explanation || selectedService.description}
                           </p>
                         </div>
                         <div className="text-right sm:border-l sm:border-slate-200 sm:pl-6 shrink-0">
                           <span className="text-[11px] text-slate-500 block">
-                            Valor Fixo Inicial
+                            {priceCalculation.label}
                           </span>
                           <span className="font-bold text-2xl text-teal-800">
                             R${' '}
-                            {selectedService.basePrice.toLocaleString('pt-BR', {
+                            {priceCalculation.price.toLocaleString('pt-BR', {
                               minimumFractionDigits: 2,
                             })}
                           </span>
-                          {selectedService.priceType === 'monthly_fixed' && (
+                          {priceCalculation.isMonthly && (
                             <span className="text-[11px] text-slate-500 block">/mês (dia 03)</span>
                           )}
                         </div>
@@ -1238,11 +1532,16 @@ export default function AgendarPage() {
 
                         <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200 space-y-1.5">
                           <span className="text-[10px] uppercase font-bold text-teal-800 tracking-wider flex items-center gap-1">
-                            <MapPin className="w-3.5 h-3.5" /> Local em Paracuru
+                            <MapPin className="w-3.5 h-3.5" /> Endereço Completo
                           </span>
-                          <p className="font-semibold text-sm text-slate-900">{address}</p>
+                          <p className="font-semibold text-sm text-slate-900">
+                            {street}, {number}
+                            {complement ? ` (${complement})` : ''}
+                          </p>
                           <p className="text-xs text-slate-600">
-                            {neighborhood} {referencePoint && `· Ref: ${referencePoint}`}
+                            {neighborhood} · {city}/{stateUf}
+                            {cep && ` · CEP ${cep}`}
+                            {referencePoint && ` · Ref: ${referencePoint}`}
                           </p>
                         </div>
                       </div>
@@ -1294,10 +1593,10 @@ export default function AgendarPage() {
                       <p className="text-[11px] leading-relaxed text-amber-900">
                         O horário ficará temporariamente bloqueado na agenda da Nora como{' '}
                         <strong>"Aguardando aprovação"</strong>. A Sra Nora avaliará o serviço
-                        solicitado. Ela poderá aprovar pelo preço fixo de R${' '}
-                        {selectedService.basePrice} ou sugerir um ajuste caso a casa seja maior.
-                        Após a aprovação, o pagamento com PIX ou Cartão no MercadoPago (modo teste)
-                        será liberado.
+                        solicitado. Ela poderá aprovar pelo valor calculado de R${' '}
+                        {priceCalculation.price} ou sugerir um ajuste caso o imóvel demande atenção
+                        extra. Após a aprovação, o pagamento com PIX ou Cartão no MercadoPago (modo
+                        teste) será liberado.
                       </p>
                     </div>
 
@@ -1389,27 +1688,40 @@ export default function AgendarPage() {
                     )}
 
                     {/* Endereço */}
-                    {address && (
+                    {(street || neighborhood) && (
                       <div className="space-y-1 pt-2 border-t border-slate-200">
                         <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block">
                           Endereço
                         </span>
-                        <p className="text-xs text-slate-900 font-medium truncate">{address}</p>
-                        <p className="text-[11px] text-slate-500">{neighborhood}</p>
+                        <p className="text-xs text-slate-900 font-medium truncate">
+                          {street
+                            ? `${street}${number ? `, nº ${number}` : ''}`
+                            : 'Endereço em preenchimento'}
+                          {complement ? ` (${complement})` : ''}
+                        </p>
+                        <p className="text-[11px] text-slate-500">
+                          {neighborhood ? `${neighborhood} · Paracuru` : 'Paracuru (CE)'}
+                          {cep ? ` · CEP ${cep}` : ''}
+                        </p>
                       </div>
                     )}
 
                     {/* Valor Estimado / Fixo */}
                     <div className="pt-3 border-t border-slate-200 space-y-1">
                       <div className="flex items-baseline justify-between">
-                        <span className="text-xs text-slate-500">Valor Fixo Inicial:</span>
+                        <span className="text-xs text-slate-500">{priceCalculation.label}:</span>
                         <span className="font-bold text-xl text-teal-800">
                           R${' '}
-                          {selectedService.basePrice.toLocaleString('pt-BR', {
+                          {priceCalculation.price.toLocaleString('pt-BR', {
                             minimumFractionDigits: 2,
                           })}
                         </span>
                       </div>
+                      {priceCalculation.isMonthly && (
+                        <p className="text-[11px] text-teal-800 font-medium">
+                          Plano mensal · Vencimento todo dia 03
+                        </p>
+                      )}
                       <p className="text-[10px] text-slate-500 leading-snug">
                         Pagamento liberado após aprovação da Nora via MercadoPago (modo teste).
                       </p>

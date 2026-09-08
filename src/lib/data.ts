@@ -334,6 +334,118 @@ export function saveBookings(bookings: Booking[]) {
   window.dispatchEvent(new Event('nora_storage_change'))
 }
 
+/**
+ * Calcula o preço correto com base nas regras reais de negócio da Sra Nora:
+ * - Cuidado de idosos:
+ *    - Plano mensal: R$ 500 (cobrança mensal com vencimento dia 03)
+ *    - Ida avulsa / diária única: R$ 160 (turno de 6h a 8h)
+ * - Limpeza simples: R$ 100 a R$ 150 (conforme frequência e sujidade, ida única padrão R$ 120)
+ * - Limpeza elaborada / faxina pesada: R$ 200 a R$ 300 (conforme tamanho/sujidade)
+ * - Limpeza recorrente semanal: R$ 130 a R$ 140
+ */
+export function calculateServicePrice(params: {
+  serviceId: string
+  frequency?: Booking['frequency']
+  dirtinessLevel?: 'normal' | 'media' | 'pesada'
+}): { price: number; label: string; isMonthly: boolean; explanation: string } {
+  const { serviceId, frequency = 'once', dirtinessLevel = 'normal' } = params
+
+  if (serviceId === 'cuidado-idosos-mensal') {
+    if (frequency === 'once') {
+      // Cliente pediu apenas ida avulsa -> R$ 160 (diária avulsa de cuidado), nunca R$ 500
+      return {
+        price: 160,
+        label: 'Diária Avulsa de Cuidado (Ida Única)',
+        isMonthly: false,
+        explanation:
+          'Turno de cuidado individualizado (6h a 8h). O plano de R$ 500 é exclusivo para a rotina mensal.',
+      }
+    }
+    return {
+      price: 500,
+      label: 'Plano Mensal de Cuidado (Vencimento Dia 03)',
+      isMonthly: true,
+      explanation: 'Rotina semanal dedicada com mensalidade fixa de R$ 500 vencendo todo dia 03.',
+    }
+  }
+
+  if (serviceId === 'cuidado-idosos-diaria') {
+    if (frequency === 'monthly') {
+      return {
+        price: 500,
+        label: 'Plano Mensal de Cuidado',
+        isMonthly: true,
+        explanation: 'Mensalidade fixa de R$ 500/mês cobrada todo dia 03.',
+      }
+    }
+    return {
+      price: 160,
+      label: 'Diária de Cuidado Avulsa',
+      isMonthly: false,
+      explanation: 'Turno dedicado de 6h a 8h de cuidado com a Sra Nora.',
+    }
+  }
+
+  if (serviceId === 'limpeza-casa-simples') {
+    let base = 120
+    if (dirtinessLevel === 'normal') {
+      base = frequency === 'weekly' ? 100 : frequency === 'biweekly' ? 110 : 120
+    } else if (dirtinessLevel === 'media') {
+      base = frequency === 'weekly' ? 115 : 130
+    } else if (dirtinessLevel === 'pesada') {
+      base = 150
+    }
+    const finalPrice = Math.max(100, Math.min(150, base))
+    return {
+      price: finalPrice,
+      label:
+        frequency === 'weekly' ? 'Valor Semanal de Limpeza Simples' : 'Valor da Limpeza Simples',
+      isMonthly: false,
+      explanation: `Faixa de R$ 100 a R$ 150 conforme frequência e sujidade (${dirtinessLevel}).`,
+    }
+  }
+
+  if (serviceId === 'limpeza-casa-elaborada') {
+    let base = 250
+    if (dirtinessLevel === 'normal') {
+      base = 220
+    } else if (dirtinessLevel === 'media') {
+      base = 250
+    } else if (dirtinessLevel === 'pesada') {
+      base = 300
+    }
+    if (frequency === 'weekly') {
+      base = Math.max(200, base - 30)
+    }
+    const finalPrice = Math.max(200, Math.min(300, base))
+    return {
+      price: finalPrice,
+      label: 'Valor da Faxina Elaborada',
+      isMonthly: false,
+      explanation: 'Faixa de R$ 200 a R$ 300 para casas amplas, litorâneas ou com maior exigência.',
+    }
+  }
+
+  if (serviceId === 'limpeza-manutencao-semanal') {
+    const finalPrice = frequency === 'once' ? 140 : 130
+    return {
+      price: finalPrice,
+      label: frequency === 'once' ? 'Valor Ida Avulsa' : 'Valor Semanal Recorrente',
+      isMonthly: false,
+      explanation: 'Manutenção semanal para manter o imóvel impecável.',
+    }
+  }
+
+  // Fallback para qualquer outro serviço
+  const service = getServiceById(serviceId)
+  return {
+    price: service?.basePrice || 120,
+    label: 'Valor Inicial',
+    isMonthly: service?.priceType === 'monthly_fixed',
+    explanation: service?.description || '',
+  }
+}
+
 export function createBooking(data: {
   serviceId: string
   client: Booking['client']

@@ -461,16 +461,21 @@ export default function AdminSolicitacoesPage() {
                         </span>
 
                         <div className="flex flex-wrap items-center gap-2">
-                          {/* 1. Aprovar Preço Fixo */}
+                          {/* 1. Aprovar Preço Solicitado */}
                           <Button
                             size="sm"
-                            onClick={() => handleApproveFixed(booking)}
-                            className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3.5 flex items-center gap-1.5 shadow-xs"
+                            onClick={() => handleApproveFixed(booking.id)}
+                            className="bg-teal-700 hover:bg-teal-800 text-white rounded-xl text-xs flex-1"
                           >
-                            <Check className="w-3.5 h-3.5" />
-                            <span>Aprovar Preço Fixo (R$ {booking.originalPrice})</span>
+                            <Check className="w-3.5 h-3.5 mr-1" />
+                            <span>
+                              Aprovar Valor Solicitado (R${' '}
+                              {booking.originalPrice.toLocaleString('pt-BR', {
+                                minimumFractionDigits: 2,
+                              })}
+                              )
+                            </span>
                           </Button>
-
                           {/* 2. Negociar Preço */}
                           <Button
                             size="sm"
