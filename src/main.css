@@ -114,6 +114,25 @@
     padding: 0 !important;
     margin: 0 !important;
   }
+
+  /* Prevenção global de overflow horizontal em mobile (320px, 375px, 390px, 768px) */
+  html,
+  body {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  /* Ocultar scrollbar mantendo rolagem horizontal suave */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 
 @layer utilities {

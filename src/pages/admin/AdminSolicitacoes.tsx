@@ -464,7 +464,7 @@ export default function AdminSolicitacoesPage() {
                           {/* 1. Aprovar Preço Solicitado */}
                           <Button
                             size="sm"
-                            onClick={() => handleApproveFixed(booking.id)}
+                            onClick={() => handleApproveFixed(booking)}
                             className="bg-teal-700 hover:bg-teal-800 text-white rounded-xl text-xs flex-1"
                           >
                             <Check className="w-3.5 h-3.5 mr-1" />

@@ -467,7 +467,7 @@ export default function AgendarPage() {
   }, [date])
 
   return (
-    <div className="min-h-screen bg-[#F6F8F7] py-6 sm:py-10">
+    <div className="min-h-screen bg-[#F6F8F7] py-6 sm:py-10 pb-28 lg:pb-12">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {createdBooking ? (
           /* ========================================================
@@ -1631,7 +1631,7 @@ export default function AgendarPage() {
                 )}
               </div>
 
-              {/* COLUNA LATERAL: RESUMO FLUTUANTE (ESTILO PARAFUZO) */}
+              {/* COLUNA LATERAL: RESUMO FLUTUANTE (DESKTOP LATERAL + BARRA FIXA INFERIOR NO MOBILE) */}
               <div className="lg:col-span-4 space-y-4 lg:sticky lg:top-24">
                 <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs space-y-5">
                   <div className="flex items-center justify-between pb-3 border-b border-slate-200">
@@ -1762,6 +1762,46 @@ export default function AgendarPage() {
                     Paracuru. Sua reserva é tratada com total carinho e pontualidade.
                   </p>
                 </div>
+              </div>
+            </div>
+
+            {/* BARRA FIXA INFERIOR MOBILE (NÃO COBRE CONTEÚDO, BOTÃO 48PX COM RESUMO RÁPIDO) */}
+            <div className="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-white/95 backdrop-blur-md border-t border-slate-200 p-3 sm:px-6 shadow-[0_-4px_16px_rgba(0,0,0,0.08)]">
+              <div className="max-w-md mx-auto flex items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-teal-800 block truncate">
+                    {priceCalculation.label}
+                  </span>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-lg font-extrabold text-slate-900 leading-tight">
+                      R${' '}
+                      {priceCalculation.price.toLocaleString('pt-BR', { minimumFractionDigits: 0 })}
+                    </span>
+                    {priceCalculation.isMonthly && (
+                      <span className="text-[10px] text-slate-500 font-medium">/mês</span>
+                    )}
+                  </div>
+                </div>
+
+                {currentStep < 4 ? (
+                  <Button
+                    type="button"
+                    onClick={handleNextStep}
+                    className="bg-teal-700 hover:bg-teal-800 text-white rounded-full px-5 py-3 h-12 text-xs sm:text-sm font-bold shadow-md shrink-0 flex items-center gap-1.5"
+                  >
+                    <span>Continuar</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
+                ) : (
+                  <Button
+                    type="button"
+                    onClick={() => handleSubmitBooking()}
+                    disabled={isSubmitting}
+                    className="bg-teal-700 hover:bg-teal-800 text-white rounded-full px-5 py-3 h-12 text-xs sm:text-sm font-bold shadow-md shrink-0 flex items-center gap-1.5"
+                  >
+                    {isSubmitting ? 'Enviando...' : 'Confirmar e Enviar'}
+                  </Button>
+                )}
               </div>
             </div>
           </div>

@@ -185,79 +185,63 @@ export default function AdminLayout() {
       </aside>
 
       {/* Mobile Top Bar */}
-      <div className="md:hidden bg-[#122026] text-white p-4 flex items-center justify-between sticky top-0 z-40 border-b border-[#1B2F38]">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-teal-600 text-white flex items-center justify-center font-bold text-sm">
+      <div className="md:hidden bg-[#122026] text-white px-4 py-3 flex items-center justify-between sticky top-0 z-40 border-b border-[#1B2F38]">
+        <Link to="/" className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-xl bg-teal-600 text-white flex items-center justify-center font-bold text-sm shrink-0">
             N
           </div>
           <div>
-            <h1 className="font-bold text-base leading-tight">Painel da Nora</h1>
-            <p className="text-[10px] text-teal-300 font-mono">Modo Teste</p>
+            <h1 className="font-bold text-sm leading-tight">Painel da Nora</h1>
+            <p className="text-[10px] text-teal-300 font-mono">Modo Teste · Paracuru</p>
           </div>
-        </div>
+        </Link>
 
         <div className="flex items-center gap-2">
           {pendingCount > 0 && (
-            <Badge className="bg-teal-700 text-white text-xs">
-              {pendingCount} pendente{pendingCount > 1 ? 's' : ''}
-            </Badge>
+            <Badge className="bg-teal-700 text-white text-[11px] px-2 py-0.5">{pendingCount}</Badge>
           )}
           <Button
+            asChild
             variant="ghost"
-            size="icon"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="text-white hover:bg-[#1A2E37]"
+            size="sm"
+            className="text-slate-300 hover:text-white text-xs px-2.5 h-8 hover:bg-[#1A2E37]"
           >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            <Link to="/" className="flex items-center gap-1">
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Ver Site</span>
+            </Link>
           </Button>
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-[#122026] text-slate-200 border-b border-[#1B2F38] p-4 space-y-2 z-30">
-          {navLinks.map((item) => {
-            const Icon = item.icon
-            return (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                end={item.end}
-                onClick={() => setMobileMenuOpen(false)}
-                className={({ isActive }) =>
-                  `flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium ${
-                    isActive ? 'bg-teal-700 text-white' : 'text-slate-300 hover:bg-[#1A2E37]'
-                  }`
-                }
-              >
-                <div className="flex items-center gap-2.5">
-                  <Icon className="w-4 h-4" />
-                  <span>{item.label}</span>
-                </div>
-                {item.badge ? (
-                  <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-white text-teal-800">
-                    {item.badge}
-                  </span>
-                ) : null}
-              </NavLink>
-            )
-          })}
-          <div className="pt-2 border-t border-[#1B2F38] flex justify-between">
-            <Link
-              to="/"
-              className="text-xs text-slate-300 hover:text-white flex items-center gap-1"
+      {/* Barra de Abas Horizontal Mobile (Sidebar vira navegação horizontal por abas no mobile) */}
+      <div className="md:hidden bg-[#16272E] border-b border-[#1B2F38] px-2 py-1.5 overflow-x-auto flex items-center gap-1.5 sticky top-[53px] z-30">
+        {navLinks.map((item) => {
+          const Icon = item.icon
+          return (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.end}
+              className={({ isActive }) =>
+                `flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all shrink-0 min-h-[40px] ${
+                  isActive
+                    ? 'bg-teal-700 text-white shadow-xs'
+                    : 'text-slate-300 hover:text-white hover:bg-[#1A2E37]'
+                }`
+              }
             >
-              <ArrowLeft className="w-3.5 h-3.5" /> Site público
-            </Link>
-            <button
-              onClick={handleResetData}
-              className="text-xs text-slate-400 hover:text-amber-200"
-            >
-              Resetar demonstração
-            </button>
-          </div>
-        </div>
-      )}
+              <Icon className="w-3.5 h-3.5 shrink-0" />
+              <span>{item.label}</span>
+              {item.badge ? (
+                <span className="ml-1 px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-white text-teal-900 leading-none">
+                  {item.badge}
+                </span>
+              ) : null}
+            </NavLink>
+          )
+        })}
+      </div>
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0">

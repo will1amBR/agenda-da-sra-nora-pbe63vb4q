@@ -295,9 +295,9 @@ export default function MercadoPagoCheckoutModal({
 
             {/* ABA PIX */}
             <TabsContent value="pix" className="space-y-5">
-              <div className="bg-[#F0F8FF] border border-[#BAE0FD] rounded-xl p-4 flex flex-col sm:flex-row items-center gap-5">
+              <div className="bg-[#F0F8FF] border border-[#BAE0FD] rounded-xl p-4 flex flex-col sm:flex-row items-center gap-4 sm:gap-5">
                 {/* QR Code Simulado SVG */}
-                <div className="w-40 h-40 bg-white p-3 rounded-lg border border-sky-200 shadow-inner flex flex-col items-center justify-center shrink-0">
+                <div className="w-36 h-36 sm:w-40 sm:h-40 bg-white p-2.5 rounded-lg border border-sky-200 shadow-inner flex flex-col items-center justify-center shrink-0">
                   <div className="grid grid-cols-6 gap-1 w-full h-full p-1 bg-stone-900 rounded">
                     {/* Visual de QR Code realista com cantos */}
                     <div className="col-span-2 row-span-2 bg-white rounded-sm p-1">
@@ -376,20 +376,20 @@ export default function MercadoPagoCheckoutModal({
                 <Label className="text-xs font-semibold text-stone-700">
                   Código Pix Copia e Cola (simulado):
                 </Label>
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
                   <Input
                     readOnly
                     value={pixData.pixCopyPaste}
-                    className="font-mono text-xs bg-slate-50 text-slate-700 truncate select-all"
+                    className="font-mono text-xs bg-slate-50 text-slate-700 truncate select-all flex-1 min-w-0"
                   />
                   <Button
                     type="button"
                     variant="outline"
                     onClick={handleCopyPix}
-                    className="border-sky-300 hover:bg-sky-50 text-sky-700 font-medium shrink-0 flex items-center gap-1.5 text-xs"
+                    className="border-sky-300 hover:bg-sky-50 text-sky-700 font-medium shrink-0 flex items-center justify-center gap-1.5 text-xs h-10 px-4"
                   >
                     <Copy className="w-3.5 h-3.5" />
-                    {copied ? 'Copiado!' : 'Copiar'}
+                    {copied ? 'Copiado!' : 'Copiar Código'}
                   </Button>
                 </div>
               </div>
